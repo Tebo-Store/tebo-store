@@ -4,7 +4,7 @@ import {
   useModalAction,
   useModalState,
 } from '@components/common/modal/modal.context';
-const LoginForm = dynamic(() => import('@components/auth/login-form'));
+const AuthModal = dynamic(() => import('@components/auth/auth-modal'));
 const SignUpForm = dynamic(() => import('@components/auth/sign-up-form'));
 const ForgetPasswordForm = dynamic(
   () => import('@components/auth/forget-password-form')
@@ -39,7 +39,7 @@ const ManagedModal: React.FC = () => {
   }
   return (
     <Modal open={isOpen} onClose={closeModal}>
-      {view === 'LOGIN_VIEW' && <LoginForm />}
+      {view === 'LOGIN_VIEW' && <AuthModal />}
       {view === 'SIGN_UP_VIEW' && <SignUpForm />}
       {view === 'FORGET_PASSWORD' && <ForgetPasswordForm />}
       {view === 'PRODUCT_CREDIT' && <ProductCredit />}

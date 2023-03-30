@@ -29,6 +29,7 @@ const BottomNavigation: React.FC = () => {
     displaySidebar,
     toggleMobileSearch,
     isAuthorized,
+    unauthorize
   } = useUI();
   const { openModal } = useModalAction();
   const { locale } = useRouter();
@@ -39,6 +40,9 @@ const BottomNavigation: React.FC = () => {
   }
   function handleMobileMenu() {
     return openSidebar();
+  }
+  function handleLogout() {
+    unauthorize()
   }
 
   return (
@@ -65,14 +69,14 @@ const BottomNavigation: React.FC = () => {
         <CartButton hideLabel={true} iconClassName="text-opacity-100" />
         <AuthMenu
           isAuthorized={isAuthorized}
-          href={ROUTES.ACCOUNT}
+
           btnProps={{
             className: 'flex-shrink-0 focus:outline-none',
             children: <UserIcon />,
             onClick: handleLogin,
           }}
+          logout={handleLogout}
         >
-          <UserIcon />
         </AuthMenu>
       </div>
       <Drawer

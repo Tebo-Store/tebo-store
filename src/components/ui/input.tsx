@@ -6,7 +6,7 @@ export interface Props extends InputHTMLAttributes<HTMLInputElement> {
   inputClassName?: string;
   label?: string;
   placeholder?: string;
-  name?: string;
+  id?: string;
   error?: string;
   type?: string;
   shadow?: boolean;
@@ -26,7 +26,7 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
     {
       className = 'block',
       label,
-      name,
+      id,
       error,
       placeholder,
       variant = 'normal',
@@ -37,6 +37,7 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
     },
     ref
   ) => {
+
     const rootClassName = cn(
       classes.root,
       {
@@ -53,15 +54,14 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
       <div className={className}>
         {label && (
           <label
-            htmlFor={name}
+            htmlFor={id}
             className="block text-gray-600 font-semibold text-sm leading-none mb-3 cursor-pointer"
           >
             {label}
           </label>
         )}
         <input
-          id={name}
-          name={name}
+          id={id}
           type={type}
           ref={ref}
           // @ts-ignore
