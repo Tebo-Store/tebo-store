@@ -1,15 +1,15 @@
 {
-  "help-one-title": "Can I use this Template For Next JS or TypeScript learning?",
-  "help-one-content": "Yes, You can use this Template for your Learning process. The coding structure is made easy for our customers. ",
-  "help-two-title": "How can I deploy BoroBazar Template?",
-  "help-two-content": "We have made the deployment process clean and simple. You can deploy the Template easily by following our documentation",
-  "help-three-title": "How can I get the customer support?",
-  "help-three-content": "After purchasing the product please open a ticket in the support forum and our support guys are always ready to help you at any kind of case. Follow this link: https://redqsupport.ticksy.com/",
-  "help-four-title": "Will you regularly give updates of BoroBazar Template?",
-  "help-four-content": "Yes, We will update the BoroBazar Template Regularly. We have a plan to give more exciting demos to our customers on a regular basis.",
-  "help-five-title": "How can I get the refund?",
-  "help-five-content": "The refund is available when we have shown the feature on our demo however it is not available on our template..",
-  "help-six-title": "Template installation failed, how to run the template? ",
-  "help-six-content": "Please read the documentation carefully . We also have some online video tutorials regarding this issue . If the problem remains, Please Open a ticket in the support forum",
-  "end": "end"
+  "help-one-title": "Могу ли я использовать этот шаблон для изучения Next JS или TypeScript?",
+  "help-one-content": "Да, вы можете использовать этот шаблон для своего обучения. Структура кода сделана удобной для наших клиентов.",
+  "help-two-title": "Как мне развернуть шаблон BoroBazar?",
+  "help-two-content": "Мы упростили процесс развёртывания шаблона. Вы можете легко развернуть шаблон, следуя нашей документации.",
+  "help-three-title": "Как я могу получить поддержку клиентов?",
+  "help-three-content": "После покупки продукта, пожалуйста, откройте тикет в форуме поддержки, и наши сотрудники всегда готовы помочь вам в любой ситуации. Следуйте этой ссылке: https://redqsupport.ticksy.com/",
+  "help-four-title": "Вы будете регулярно обновлять шаблон BoroBazar?",
+  "help-four-content": "Да, мы будем регулярно обновлять шаблон BoroBazar. У нас есть планы по регулярному добавлению новых демо-версий для наших клиентов.",
+  "help-five-title": "Как я могу получить возврат денег?",
+  "help-five-content": "Возврат денег доступен, если мы продемонстрировали возможность в нашей демо-версии, однако он не доступен для нашего шаблона.",
+  "help-six-title": "Установка шаблона не удалась, как запустить шаблон?",
+  "help-six-content": "Пожалуйста, внимательно прочитайте документацию. У нас также есть некоторые онлайн-видеоуроки по этому вопросу. Если проблема остаётся, пожалуйста, откройте тикет в форуме поддержки.",
+  "end": "конец"
 }
