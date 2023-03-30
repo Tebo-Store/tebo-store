@@ -11,7 +11,7 @@ import { useRouter } from 'next/router';
 
 export default function ProductCredit() {
   const { closeModal, openModal } = useModalAction();
-  const productPrice = 3423000;
+  const productPrice = 1000000;
 
   const [month, setMonth] = useState('3');
   const [price, setPrice] = useState(`${productPrice * 25 / 100}`);

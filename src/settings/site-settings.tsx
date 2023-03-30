@@ -1,18 +1,18 @@
 export const siteSettings = {
-  name: 'BoroBazar',
+  name: 'Tebo',
   description:
     'Fastest E-commerce template built with React, NextJS, TypeScript, React-Query and Tailwind CSS.',
   author: {
-    name: 'RedQ, Inc.',
-    websiteUrl: 'https://redq.io',
+    name: 'TeboStore',
+    websiteUrl: 'https://tebo.uz',
     address: '',
   },
   logo: {
     url: '/assets/images/logo.png',
     alt: 'BoroBazar',
     href: '/',
-    width: 145,
-    height: 45,
+    width: 120,
+    height: 40,
   },
   defaultLanguage: 'en',
   currencyCode: 'USD',
