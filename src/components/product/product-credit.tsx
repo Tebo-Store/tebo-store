@@ -12,6 +12,7 @@ import { toDividePrice } from '@utils/toDividePrice'
 
 export default function ProductCredit() {
   const { closeModal, openModal } = useModalAction();
+
   const router = useRouter();
 
   const productPrice = 1000000;
