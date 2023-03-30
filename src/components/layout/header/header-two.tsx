@@ -23,7 +23,7 @@ type DivElementRef = React.MutableRefObject<HTMLDivElement>;
 const { site_header } = siteSettings;
 
 const Header: React.FC = () => {
-  const { openSidebar, isAuthorized, displayMobileSearch } = useUI();
+  const { openSidebar, isAuthorized, displayMobileSearch, unauthorize } = useUI();
   const { openModal } = useModalAction();
   const { t } = useTranslation('common');
   const siteHeaderRef = useRef() as DivElementRef;
@@ -33,6 +33,10 @@ const Header: React.FC = () => {
   }
   function handleMobileMenu() {
     return openSidebar();
+  }
+
+  function handleLogout() {
+    unauthorize()
   }
 
   return (
@@ -67,16 +71,15 @@ const Header: React.FC = () => {
             <LanguageSwitcher />
             <CartButton className="hidden lg:flex" />
             <div className="hidden lg:flex items-center flex-shrink-0 ">
-              <UserIcon className="text-skin-base text-opacity-40" />
               <AuthMenu
                 isAuthorized={isAuthorized}
-                href={ROUTES.ACCOUNT}
+
                 btnProps={{
                   children: t('text-sign-in'),
                   onClick: handleLogin,
                 }}
+                logout={handleLogout}
               >
-                {t('text-account')}
               </AuthMenu>
             </div>
           </div>

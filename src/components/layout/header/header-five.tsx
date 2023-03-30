@@ -11,7 +11,6 @@ import Logo from '@components/ui/logo';
 import HeaderMenu from '@components/layout/header/header-menu';
 import Search from '@components/common/search';
 import LanguageSwitcher from '@components/ui/language-switcher';
-import UserIcon from '@components/icons/user-icon';
 import SearchIcon from '@components/icons/search-icon';
 import { useModalAction } from '@components/common/modal/modal.context';
 import useOnClickOutside from '@utils/use-click-outside';
@@ -34,6 +33,7 @@ const Header: React.FC = () => {
     openSearch,
     closeSearch,
     isAuthorized,
+    unauthorize
   } = useUI();
   const { openModal } = useModalAction();
   const siteHeaderRef = useRef() as DivElementRef;
@@ -48,6 +48,11 @@ const Header: React.FC = () => {
   function handleCategoryMenu() {
     setCategoryMenu(!categoryMenu);
   }
+
+  function handleLogout() {
+    unauthorize()
+  }
+
 
   return (
     <header
@@ -95,16 +100,13 @@ const Header: React.FC = () => {
             <LanguageSwitcher />
             <CartButton className="hidden lg:flex" />
             <div className="hidden lg:flex items-center flex-shrink-0 ">
-              <UserIcon className="text-skin-base text-opacity-40" />
               <AuthMenu
                 isAuthorized={isAuthorized}
-                href={ROUTES.ACCOUNT}
                 btnProps={{
-                  children: t('text-sign-in'),
                   onClick: handleLogin,
                 }}
+                logout={handleLogout}
               >
-                {t('text-account')}
               </AuthMenu>
             </div>
           </div>
@@ -144,7 +146,6 @@ const Header: React.FC = () => {
             {/* End of conditional search  */}
 
             <div className="ms-auto flex items-center flex-shrink-0">
-              <Delivery />
               <div className="navbar-right flex items-center overflow-hidden py-4 w-0 opacity-0 transition-all duration-200 ease-in-out">
                 <button
                   type="button"
@@ -161,16 +162,14 @@ const Header: React.FC = () => {
                 {/* End of cart btn */}
 
                 <div className="flex-shrink-0 flex items-center ms-7">
-                  <UserIcon className="text-skin-base text-opacity-40" />
                   <AuthMenu
                     isAuthorized={isAuthorized}
-                    href={ROUTES.ACCOUNT}
                     btnProps={{
                       children: t('text-sign-in'),
                       onClick: handleLogin,
                     }}
+                    logout={handleLogout}
                   >
-                    {t('text-account')}
                   </AuthMenu>
                 </div>
                 {/* End of auth */}
