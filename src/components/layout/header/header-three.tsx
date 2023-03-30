@@ -34,6 +34,7 @@ const Header: React.FC = () => {
     closeSearch,
     isAuthorized,
     displayMobileSearch,
+    unauthorize
   } = useUI();
   const siteHeaderRef = useRef() as DivElementRef;
   const siteSearchRef = useRef() as DivElementRef;
@@ -44,6 +45,10 @@ const Header: React.FC = () => {
   }
   function handleMobileMenu() {
     return openSidebar();
+  }
+
+  function handleLogout() {
+    unauthorize()
   }
 
   return (
@@ -103,16 +108,14 @@ const Header: React.FC = () => {
             <LanguageSwitcher />
             <CartButton className="hidden lg:flex" />
             <div className="hidden lg:flex items-center flex-shrink-0 ">
-              <UserIcon className="text-skin-base text-opacity-40" />
               <AuthMenu
                 isAuthorized={isAuthorized}
-                href={ROUTES.ACCOUNT}
                 btnProps={{
                   children: t('text-sign-in'),
                   onClick: handleLogin,
                 }}
+                logout={handleLogout}
               >
-                {t('text-account')}
               </AuthMenu>
             </div>
           </div>

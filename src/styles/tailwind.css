@@ -481,6 +481,15 @@
   }
 }
 
+input[type=range] {
+  appearance: none;
+
+  height: 8px;
+  border-radius: 4px;
+  background-color: #ccc;
+}
+
+
 /* Checkout details page accordion */
 .accordion__panel.collapsed .accordion__content {
   display: none;
@@ -550,4 +559,16 @@
 }
 .checkout .save-change-button {
   display: none;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+input[type='number'],
+input[type="number"]:hover,
+input[type="number"]:focus {
+    appearance: none;
+    -moz-appearance: textfield;
 }

@@ -31,6 +31,7 @@ function modalReducer(state: State, action: Action): State {
   switch (action.type) {
     case 'open':
       return {
+        ...state,
         view: action.view,
         data: action.payload,
         isOpen: true,
@@ -80,13 +81,9 @@ export function useModalAction() {
   }
   return {
     openModal(view?: MODAL_VIEWS, payload?: unknown) {
-      console.log(view, payload);
-
       dispatch({ type: 'open', view, payload });
     },
     closeModal() {
-      console.log('close');
-      
       dispatch({ type: 'close' });
     },
   };

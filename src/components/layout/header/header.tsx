@@ -32,6 +32,7 @@ const Header: React.FC = () => {
     openSearch,
     closeSearch,
     isAuthorized,
+    unauthorize,
   } = useUI();
   const { openModal } = useModalAction();
   const siteHeaderRef = useRef() as DivElementRef;
@@ -40,6 +41,9 @@ const Header: React.FC = () => {
   useOnClickOutside(siteSearchRef, () => closeSearch());
   function handleLogin() {
     openModal('LOGIN_VIEW');
+  }
+  function handleLogout() {
+    unauthorize()
   }
 
   return (
@@ -51,7 +55,7 @@ const Header: React.FC = () => {
         displayMobileSearch && 'active-mobile-search'
       )}
     >
-      <div className="innerSticky w-screen lg:w-full transition-all duration-200 ease-in-out body-font bg-skin-secondary z-20">
+      <div className="innerSticky lg:w-full transition-all duration-200 ease-in-out body-font bg-skin-secondary z-20">
         <Search
           searchId="mobile-search"
           className="top-bar-search hidden lg:max-w-[600px] absolute z-30 px-4 md:px-6 top-1"
@@ -71,16 +75,14 @@ const Header: React.FC = () => {
             <LanguageSwitcher />
             <CartButton className="hidden lg:flex" />
             <div className="hidden lg:flex items-center flex-shrink-0 ">
-              <UserIcon className="text-skin-base text-opacity-40" />
               <AuthMenu
                 isAuthorized={isAuthorized}
-                href={ROUTES.ACCOUNT}
                 btnProps={{
-                  children: t('text-sign-in'),
+                  children: 'Войти1',
                   onClick: handleLogin,
                 }}
+                logout={handleLogout}
               >
-                {t('text-account')}
               </AuthMenu>
             </div>
           </div>
@@ -110,7 +112,6 @@ const Header: React.FC = () => {
             {/* End of conditional search  */}
 
             <div className="ms-auto flex items-center flex-shrink-0">
-              <Delivery />
               <div className="navbar-right flex items-center overflow-hidden py-4 w-0 opacity-0 transition-all duration-200 ease-in-out">
                 <button
                   type="button"
@@ -127,14 +128,13 @@ const Header: React.FC = () => {
                 {/* End of cart btn */}
 
                 <div className="flex-shrink-0 flex items-center ms-7">
-                  <UserIcon className="text-skin-base text-opacity-40" />
                   <AuthMenu
                     isAuthorized={isAuthorized}
-                    href={ROUTES.ACCOUNT}
                     btnProps={{
                       children: t('text-sign-in'),
                       onClick: handleLogin,
                     }}
+                    logout={handleLogout}
                   >
                     {t('text-account')}
                   </AuthMenu>

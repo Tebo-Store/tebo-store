@@ -1,5 +1,5 @@
 import Layout from '@components/layout/layout';
-import LoginForm from '@components/auth/login-form';
+import LoginForm from '@components/auth/auth-form';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Divider from '@components/ui/divider';
