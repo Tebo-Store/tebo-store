@@ -26,13 +26,13 @@ function RenderPopupOrAddToCart({ data }: { data: Product }) {
   function handlePopupView() {
     openModal('PRODUCT_VIEW', data);
   }
-  if (Number(quantity) < 1 || outOfStock) {
-    return (
-      <span className="text-[11px] md:text-xs font-bold text-skin-inverted uppercase inline-block bg-skin-red rounded-full px-2.5 pt-1 pb-[3px] mx-0.5 sm:mx-1">
-        {t('text-out-stock')}
-      </span>
-    );
-  }
+  // if (Number(quantity) < 1 || outOfStock) {
+  //   return (
+  //     // <span className="text-[11px] md:text-xs font-bold text-skin-inverted uppercase inline-block bg-skin-red rounded-full px-2.5 pt-1 pb-[3px] mx-0.5 sm:mx-1">
+  //     //   {t('text-out-stock')}
+  //     // </span>
+  //   );
+  // }
   if (product_type === 'variable') {
     return (
       <button
@@ -88,11 +88,11 @@ const ProductCard: React.FC<ProductProps> = ({ product, className }) => {
           />
         </div>
         <div className="w-full h-full absolute top-0 pt-2.5 md:pt-3.5 px-3 md:px-4 lg:px-[18px] z-10 -mx-0.5 sm:-mx-1">
-          {discount && (
+          {/* {discount && (
             <span className="text-[11px] md:text-xs font-bold text-skin-inverted uppercase inline-block bg-skin-primary rounded-full px-2.5 pt-1 pb-[3px] mx-0.5 sm:mx-1">
               {t('text-on-sale')}
             </span>
-          )}
+          )} */}
           <div className="inline-block product-count-button-position">
             <RenderPopupOrAddToCart data={product} />
           </div>

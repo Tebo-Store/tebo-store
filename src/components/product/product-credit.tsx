@@ -4,13 +4,16 @@ import { useRouter } from 'next/router';
 import {
   useModalAction,
 } from '@components/common/modal/modal.context';
+import { useInstallmentContext } from '@contexts/installment';
 
 import CloseButton from '@components/ui/close-button';
 import UIButton from '@components/ui/button';
 
 import { toDividePrice } from '@utils/toDividePrice'
 
+
 export default function ProductCredit() {
+  const { setInstallmentProduct } = useInstallmentContext()
   const { closeModal, openModal } = useModalAction();
 
   const router = useRouter();
@@ -154,6 +157,7 @@ export default function ProductCredit() {
         className="w-full mt-4"
         onClick={() => {
           closeModal()
+          localStorage.setItem('installment-data', JSON.stringify({ firstPayment: +firstPayment, month: +month, totalPrice, monthlyPayment }))
           router.push('installment');
         }}
       >

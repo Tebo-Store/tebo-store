@@ -6,7 +6,7 @@ export interface Item {
   [key: string]: any;
 }
 
-export interface UpdateItemInput extends Partial<Omit<Item, 'id'>> {}
+export interface UpdateItemInput extends Partial<Omit<Item, 'id'>> { }
 
 export function addItemWithQuantity(
   items: Item[],
