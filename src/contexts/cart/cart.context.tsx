@@ -30,6 +30,8 @@ export const CartProvider: React.FC = (props) => {
     `borobazar-cart`,
     JSON.stringify(initialState)
   );
+  console.log(savedCart);
+  
   const [state, dispatch] = React.useReducer(
     cartReducer,
     JSON.parse(savedCart!)

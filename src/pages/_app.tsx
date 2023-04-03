@@ -10,7 +10,8 @@ import { ToastContainer } from 'react-toastify';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { appWithTranslation } from 'next-i18next';
 import { DefaultSeo } from '@components/seo/default-seo';
-import { InstallmentContextProvider } from '@contexts/installment'
+import { InstallmentContextProvider } from '@contexts/installment';
+import { ShoppingCartProvider } from '@contexts/myCart/cart';
 
 // external
 import 'react-toastify/dist/ReactToastify.css';
@@ -40,17 +41,19 @@ const CustomApp = ({ Component, pageProps }: AppProps) => {
     <QueryClientProvider client={queryClientRef.current}>
       <Hydrate state={pageProps.dehydratedState}>
         <ManagedUIContext>
-          <InstallmentContextProvider>
-            <>
-              <DefaultSeo />
-              <Layout pageProps={pageProps}>
-                <Component {...pageProps} key={router.route} />
-              </Layout>
-              <ToastContainer />
-              <ManagedModal />
-              <ManagedDrawer />
-            </>
-          </InstallmentContextProvider>
+          <ShoppingCartProvider>
+            <InstallmentContextProvider>
+              <>
+                <DefaultSeo />
+                <Layout pageProps={pageProps}>
+                  <Component {...pageProps} key={router.route} />
+                </Layout>
+                <ToastContainer />
+                <ManagedModal />
+                <ManagedDrawer />
+              </>
+            </InstallmentContextProvider>
+          </ShoppingCartProvider>
         </ManagedUIContext>
       </Hydrate>
       {/* <ReactQueryDevtools /> */}
