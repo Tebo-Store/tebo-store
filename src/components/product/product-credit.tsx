@@ -158,7 +158,7 @@ export default function ProductCredit() {
         onClick={() => {
           closeModal()
           localStorage.setItem('installment-data', JSON.stringify({ firstPayment: +firstPayment, month: +month, totalPrice, monthlyPayment }))
-          router.push('installment');
+          router.push('/installment');
         }}
       >
         Оформить в рассрочку

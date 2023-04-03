@@ -26,13 +26,13 @@ const Counter: React.FC<CounterProps> = ({
 }) => {
   const size = variant === 'single' ? '22' : '14';
   const { t } = useTranslation('common');
+
   return (
     <div
       className={cn(
         'flex items-center justify-between rounded overflow-hidden flex-shrink-0',
         {
-          'h-8 md:h-10 bg-skin-fill shadow-counter rounded-3xl':
-            variant === 'default',
+          'h-[38px] bg-skin-fill shadow-counter': variant === 'default',
           'h-11 md:h-14 bg-skin-button-secondary': variant === 'single',
           'inline-flex': variant === 'cart',
         },
