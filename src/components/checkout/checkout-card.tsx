@@ -8,61 +8,39 @@ import { CheckoutCardFooterItem } from './checkout-card-footer-item';
 import { useTranslation } from 'next-i18next';
 import Router from 'next/router';
 import { ROUTES } from '@utils/routes';
+import { useShoppingCart } from '@contexts/myCart/cart';
+import { toDividePrice } from '@utils/toDividePrice';
+import { useUI } from '@contexts/ui.context';
+import { useModalAction } from '@components/common/modal/modal.context';
 
 const CheckoutCard: React.FC = () => {
   const { t } = useTranslation('common');
+  const { totalPrice, cartItems } = useShoppingCart();
+  const { openModal } = useModalAction();
+  const { isAuthorized } = useUI();
   const { items, total, isEmpty } = useCart();
   const { price: subtotal } = usePrice({
     amount: total,
     currencyCode: 'USD',
   });
-  function orderHeader() {
-    !isEmpty && Router.push(ROUTES.ORDER);
-  }
-  const checkoutFooter = [
-    {
-      id: 1,
-      name: t('text-sub-total'),
-      price: subtotal,
-    },
-    {
-      id: 2,
-      name: t('text-shipping'),
-      price: '$0',
-    },
-    {
-      id: 3,
-      name: t('text-total'),
-      price: subtotal,
-    },
-  ];
   return (
     <>
-      <div className="border border-skin-base bg-skin-fill rounded-md py-1 xl:py-6 px-4 xl:px-7">
-        <div className="flex py-4 rounded-md text-sm font-semibold text-heading">
-          <span className="text-15px text-skin-base font-medium">
-            {t('text-product')}
+      <div className="border border-skin-base bg-skin-fill rounded-md p-4 md:px-5">
+        <div className="flex items-center">
+          <span className="text-sm md:text-lg text-skin-base font-medium">
+            Итого:
           </span>
-          <span className="ms-auto flex-shrink-0 text-15px text-skin-base font-medium ">
-            {t('text-sub-total')}
+          <span className="ms-auto flex-shrink-0 text-base md:text-xl text-skin-base font-medium">
+            {toDividePrice(totalPrice)} сум
           </span>
         </div>
-        {!isEmpty ? (
-          items.map((item) => <CheckoutItem item={item} key={item.id} />)
-        ) : (
-          <p className="text-skin-red text-opacity-70 py-4">
-            {t('text-empty-cart')}
-          </p>
-        )}
-        {checkoutFooter.map((item: any) => (
-          <CheckoutCardFooterItem item={item} key={item.id} />
-        ))}
         <Button
           variant="formButton"
-          className={`w-full mt-8 mb-5 bg-skin-primary text-skin-inverted rounded font-semibold px-4 py-3 transition-all ${
-            isEmpty && 'opacity-40 cursor-not-allowed'
-          }`}
-          onClick={orderHeader}
+          className={`w-full mt-8 bg-skin-primary text-skin-inverted rounded font-semibold px-4 py-3 transition-all`}
+          disabled={!(cartItems.length > 0)}
+          onClick={() => {
+            isAuthorized ? console.log('sumit') : openModal('LOGIN_VIEW');
+          }}
         >
           {t('button-order-now')}
         </Button>

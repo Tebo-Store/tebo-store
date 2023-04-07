@@ -30,7 +30,7 @@ const ProductCard: React.FC<ProductProps> = ({ product, className }) => {
       )}
     >
       <Link href={`products/${product.slug}`}>
-        <div>
+        <a>
           <div className="relative flex-shrink-0">
             <div className="flex overflow-hidden max-w-[230px] mx-auto transition duration-200 ease-in-out transform group-hover:scale-105 relative">
               <Image
@@ -78,7 +78,7 @@ const ProductCard: React.FC<ProductProps> = ({ product, className }) => {
               {name}
             </h2>
           </div>
-        </div>
+        </a>
       </Link>
 
       <div className="px-3 pt-2 lg:pt-4 flex flex-col flex-grow justify-end space-y-3">
