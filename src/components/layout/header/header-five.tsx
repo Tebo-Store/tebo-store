@@ -129,10 +129,10 @@ const Header: React.FC = () => {
               {categoryMenu && <CategoryDropdownMenu />}
             </div>
 
-            <HeaderMenu
+            {/* <HeaderMenu
               data={site_header.menu}
               className="flex transition-all duration-200 ease-in-out"
-            />
+            /> */}
             {/* End of main menu */}
 
             {displaySearch && (

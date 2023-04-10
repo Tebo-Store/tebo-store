@@ -98,7 +98,7 @@ const breakpoints = {
 };
 
 const FeatureCarousel: React.FC<Props> = ({
-  className = 'mb-12 md:mb-14 xl:mb-[74px]',
+  className = 'mb-0',
 }) => {
   return (
     <div className={`heightFull ${className}`}>

@@ -21,6 +21,7 @@ import { bannersGridHero as bannersHero } from '@framework/static/banner';
 import { elegantBannerGrid as banners } from '@framework/static/banner';
 import FeatureCarousel from '@components/common/featured-carousel';
 import PopularProductWithBestDeals from '@components/product/popular-product-with-best-deals';
+import ProductsSlider from '@components/product/products-slider';
 
 export default function Home() {
   return (
@@ -37,6 +38,7 @@ export default function Home() {
           className="my-3 md:my-4 lg:mt-0 lg:mb-5 xl:mb-6"
         />
         <FeatureCarousel />
+        <ProductsSlider />
         <BestSellerGroceryProductFeed className="mb-12 lg:mb-14 xl:mb-16 2xl:mb-20" />
         <BundleGrid
           className="mb-12 lg:mb-14 xl:mb-16 2xl:mb-20"

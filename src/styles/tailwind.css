@@ -263,6 +263,12 @@
 }
 
 @layer utilities {
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
   .scroll-snap-type-y-mandatory {
     scroll-snap-type: y mandatory;
   }
@@ -481,14 +487,13 @@
   }
 }
 
-input[type=range] {
+input[type='range'] {
   appearance: none;
 
   height: 8px;
   border-radius: 4px;
   background-color: #ccc;
 }
-
 
 /* Checkout details page accordion */
 .accordion__panel.collapsed .accordion__content {
@@ -561,14 +566,14 @@ input[type=range] {
   display: none;
 }
 
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
 }
 
 input[type='number'],
-input[type="number"]:hover,
-input[type="number"]:focus {
-    appearance: none;
-    -moz-appearance: textfield;
+input[type='number']:hover,
+input[type='number']:focus {
+  appearance: none;
+  -moz-appearance: textfield;
 }

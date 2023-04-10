@@ -4,6 +4,8 @@ import { siteSettings } from '@settings/site-settings';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 
+import { MdKeyboardArrowDown } from 'react-icons/md';
+
 export default function LanguageSwitcher() {
   const { site_header } = siteSettings;
   const { t } = useTranslation('common');
@@ -28,7 +30,8 @@ export default function LanguageSwitcher() {
         <div className="relative z-10 lg:top-[1px]">
           <Listbox.Button className="text-skin-base relative w-full px-2  py-2 text-start  rounded-lg shadow-md focus:outline-none cursor-pointer">
             <span className="flex truncate items-center text-sm lg:text-15px">
-              <span className="leading-5 pb-0.5">{t(selectedItem.name)}</span>
+              <span className="leading-5 mr-1">{t(selectedItem.name)}</span>
+              <MdKeyboardArrowDown size={20} />
             </span>
           </Listbox.Button>
           <Transition

@@ -90,15 +90,15 @@ const Header: React.FC = () => {
         </Container>
         {/* End of top part */}
 
-        <div className="navbar bg-skin-fill hidden lg:block">
+        <div className="navbar bg-skin-fill hidden" >
           <Container className="h-16 flex justify-between items-center">
             <Logo className="navbar-logo w-0 opacity-0 transition-all duration-200 ease-in-out" />
             {/* End of logo */}
 
-            <HeaderMenu
+            {/* <HeaderMenu
               data={site_header.menu}
               className="flex transition-all duration-200 ease-in-out"
-            />
+            /> */}
             {/* End of main menu */}
 
             {displaySearch && (

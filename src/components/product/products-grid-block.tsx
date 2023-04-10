@@ -32,9 +32,9 @@ const ProductsGridBlock: React.FC<ProductsProps> = ({
       <SectionHeader
         sectionHeading={sectionHeading}
         sectionSubHeading={sectionSubHeading}
-        headingPosition={headingPosition}
+        headingPosition={'center'}
       />
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 3xl:grid-cols-7 gap-3 md:gap-4 2xl:gap-5">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 3xl:grid-cols-7 gap-3 sm:gap-4 lg:gap-5">
         {error ? (
           <Alert message={error} className="col-span-full" />
         ) : loading && !products?.length ? (

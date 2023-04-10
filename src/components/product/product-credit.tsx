@@ -1,19 +1,16 @@
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 
-import {
-  useModalAction,
-} from '@components/common/modal/modal.context';
+import { useModalAction } from '@components/common/modal/modal.context';
 import { useInstallmentContext } from '@contexts/installment';
 
 import CloseButton from '@components/ui/close-button';
 import UIButton from '@components/ui/button';
 
-import { toDividePrice } from '@utils/toDividePrice'
-
+import { toDividePrice } from '@utils/toDividePrice';
 
 export default function ProductCredit() {
-  const { setInstallmentProduct } = useInstallmentContext()
+  const { setInstallmentProduct } = useInstallmentContext();
   const { closeModal, openModal } = useModalAction();
 
   const router = useRouter();
@@ -21,8 +18,8 @@ export default function ProductCredit() {
   const productPrice = 1000000;
   const margin = 90;
 
-  const minFirstPayment = productPrice * 25 / 100;
-  const maxFirstPayment = productPrice * 80 / 100;
+  const minFirstPayment = (productPrice * 25) / 100;
+  const maxFirstPayment = (productPrice * 80) / 100;
 
   const [month, setMonth] = useState('3');
   const [firstPayment, setFirstPayment] = useState(`${minFirstPayment}`);
@@ -44,21 +41,31 @@ export default function ProductCredit() {
   // }, [watch])
 
   const annuetit = useMemo(() => {
-    const percent = (margin / 100)
-    const BeforeB = Math.pow(1 + Number(percent) / 12, Number(month))
-    const A = ((Number(percent) / 12) * Math.pow((1 + Number(percent) / 12), Number(month)))
-    const B = BeforeB - 1
+    const percent = margin / 100;
+    const BeforeB = Math.pow(1 + Number(percent) / 12, Number(month));
+    const A =
+      (Number(percent) / 12) *
+      Math.pow(1 + Number(percent) / 12, Number(month));
+    const B = BeforeB - 1;
 
     return A / B;
-  }, [month])
+  }, [month]);
 
   const monthlyPayment = useMemo(() => {
-    return Math.round(annuetit * (productPrice - Number(firstPayment)) / 1000) * 1000
-  }, [annuetit, productPrice, firstPayment])
+    return (
+      Math.round((annuetit * (productPrice - Number(firstPayment))) / 1000) *
+      1000
+    );
+  }, [annuetit, productPrice, firstPayment]);
 
   const totalPrice = useMemo(() => {
-    return (Math.round(annuetit * (productPrice - Number(firstPayment)) / 1000) * 1000) * Number(month) + Number(firstPayment)
-  }, [annuetit, productPrice, month, firstPayment])
+    return (
+      Math.round((annuetit * (productPrice - Number(firstPayment))) / 1000) *
+        1000 *
+        Number(month) +
+      Number(firstPayment)
+    );
+  }, [annuetit, productPrice, month, firstPayment]);
 
   // const monthlyPayment = useMemo(() => {
   //   console.log(getValues().firstPayment);
@@ -75,7 +82,7 @@ export default function ProductCredit() {
     <div className="p-5 w-full md:w-[450px] bg-skin-fill rounded-lg shadow-dropDown">
       <CloseButton onClick={closeModal} />
 
-      <div className='mb-4'>
+      <div className="mb-4">
         <h2 className="text-lg font-bold">Купить в рассрочку</h2>
 
         <div>Сам продукт</div>
@@ -101,10 +108,12 @@ export default function ProductCredit() {
           />
         </label>
 
-        <label className='block'>
+        <label className="block">
           <div className="flex items-center justify-between">
             <span className="text-xs">{toDividePrice(minFirstPayment)}</span>
-            <span className="text-base font-medium">{toDividePrice(+firstPayment)}</span>
+            <span className="text-base font-medium">
+              {toDividePrice(+firstPayment)}
+            </span>
             <span className="text-xs">{toDividePrice(maxFirstPayment)}</span>
           </div>
 
@@ -115,7 +124,7 @@ export default function ProductCredit() {
             type="range"
             min={minFirstPayment}
             max={maxFirstPayment}
-            step='1000'
+            step="1000"
           />
         </label>
       </div>
@@ -139,25 +148,35 @@ export default function ProductCredit() {
           error={errors.firstPayment?.message}
         /> */}
 
-
-
       <div className="mt-4 space-y-4">
         <div className="flex items-center justify-between">
           <span className="text-xs md:text-base mr-2">Ежемесячный платеж</span>
 
-          <span className="md:text-lg font-medium">{toDividePrice(monthlyPayment)} сум</span>
+          <span className="md:text-lg font-medium">
+            {toDividePrice(monthlyPayment)} сум
+          </span>
         </div>
         <div className="flex items-center justify-between">
           <span className="text-xs md:text-base mr-2">Общая сумма</span>
-          <span className="md:text-lg font-medium">{toDividePrice(totalPrice)} сум</span>
+          <span className="md:text-lg font-medium">
+            {toDividePrice(totalPrice)} сум
+          </span>
         </div>
       </div>
 
       <UIButton
         className="w-full mt-4"
         onClick={() => {
-          closeModal()
-          localStorage.setItem('installment-data', JSON.stringify({ firstPayment: +firstPayment, month: +month, totalPrice, monthlyPayment }))
+          closeModal();
+          localStorage.setItem(
+            'installment-data',
+            JSON.stringify({
+              firstPayment: +firstPayment,
+              month: +month,
+              totalPrice,
+              monthlyPayment,
+            })
+          );
           router.push('/installment');
         }}
       >
