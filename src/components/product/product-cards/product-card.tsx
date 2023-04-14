@@ -66,6 +66,9 @@ const ProductCard: React.FC<ProductProps> = ({ product, className }) => {
       )}
     >
       <div className="relative flex-shrink-0">
+        <div className="pointer-events-none absolute z-10 top-2 left-2 px-3 py-1 bg-red-500 rounded-md text-sm text-white">
+          Новинка
+        </div>
         <Link href={`products/${product.slug}`}>
           <a>
             <div className="flex overflow-hidden max-w-[230px] mx-auto transition duration-200 ease-in-out transform group-hover:scale-105 relative">

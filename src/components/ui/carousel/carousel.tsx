@@ -30,6 +30,8 @@ type CarouselPropsType = {
   navigation?: {} | any;
   autoplay?: {} | any;
   grid?: {} | any;
+  slidesPerView?: number | 'auto';
+  spaceBetween?: number | string;
 };
 
 const Carousel: React.FunctionComponent<CarouselPropsType> = ({
@@ -47,6 +49,8 @@ const Carousel: React.FunctionComponent<CarouselPropsType> = ({
   loop = false,
   grid,
   autoplay,
+  slidesPerView,
+  spaceBetween,
   ...props
 }) => {
   const { locale } = useRouter();
@@ -70,6 +74,8 @@ const Carousel: React.FunctionComponent<CarouselPropsType> = ({
       }`}
     >
       <Swiper
+        spaceBetween={spaceBetween}
+        slidesPerView={slidesPerView}
         modules={[Navigation, Autoplay, Pagination, Grid]}
         autoplay={autoplay}
         breakpoints={breakpoints}

@@ -24,6 +24,50 @@ const data = [
   {
     id: 2,
     icon: (
+      <CouponIcon
+        color="#E9AD26"
+        className="transform scale-75 xl:scale-90 3xl:scale-100"
+      />
+    ),
+    title: 'feature-title-five',
+    description: 'feature-title-five-description',
+  },
+  {
+    id: 3,
+    icon: (
+      <CouponIcon
+        color="#E9AD26"
+        className="transform scale-75 xl:scale-90 3xl:scale-100"
+      />
+    ),
+    title: 'feature-title-five',
+    description: 'feature-title-five-description',
+  },
+  {
+    id: 4,
+    icon: (
+      <CouponIcon
+        color="#E9AD26"
+        className="transform scale-75 xl:scale-90 3xl:scale-100"
+      />
+    ),
+    title: 'feature-title-five',
+    description: 'feature-title-five-description',
+  },
+  {
+    id: 5,
+    icon: (
+      <CouponIcon
+        color="#E9AD26"
+        className="transform scale-75 xl:scale-90 3xl:scale-100"
+      />
+    ),
+    title: 'feature-title-five',
+    description: 'feature-title-five-description',
+  },
+  {
+    id: 6,
+    icon: (
       <CalendarIcon
         color="#E9AD26"
         className="transform scale-75 xl:scale-90 3xl:scale-100"
@@ -33,7 +77,7 @@ const data = [
     description: 'feature-title-six-description',
   },
   {
-    id: 3,
+    id: 7,
     icon: (
       <FeedbackIcon
         width="55px"
@@ -46,7 +90,7 @@ const data = [
     description: 'feature-title-seven-description',
   },
   {
-    id: 4,
+    id: 8,
     icon: (
       <PromotionIcon
         color="#E9AD26"
@@ -57,7 +101,7 @@ const data = [
     description: 'feature-title-eight-description',
   },
   {
-    id: 5,
+    id: 9,
     icon: (
       <ChatIcon
         color="#E9AD26"
@@ -88,32 +132,22 @@ const breakpoints = {
     slidesPerView: 2,
     spaceBetween: 16,
   },
-  '640 ': {
+  '640': {
     slidesPerView: 2,
     spaceBetween: 12,
   },
   '0': {
-    slidesPerView: 1,
+    slidesPerView: 3,
+    spaceBetween: 16,
   },
 };
 
-const FeatureCarousel: React.FC<Props> = ({
-  className = 'mb-0',
-}) => {
+const FeatureCarousel: React.FC<Props> = ({ className = 'mb-0' }) => {
   return (
-    <div className={`heightFull ${className}`}>
-      <Carousel
-        autoplay={false}
-        breakpoints={breakpoints}
-        prevActivateId="featured-carousel-button-prev"
-        nextActivateId="featured-carousel-button-next"
-      >
-        {data?.map((item) => (
-          <SwiperSlide key={`featured-key-${item.id}`}>
-            <FeaturedCard item={item} />
-          </SwiperSlide>
-        ))}
-      </Carousel>
+    <div className={`brands heightFull overflow-x-auto flex flex-nowrap space-x-3 ${className}`}>
+      {data?.map((item) => (
+        <FeaturedCard item={item} key={item.id} />
+      ))}
     </div>
   );
 };

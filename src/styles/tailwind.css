@@ -577,3 +577,15 @@ input[type='number']:focus {
   appearance: none;
   -moz-appearance: textfield;
 }
+
+
+.brands {
+  overflow: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.brands::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}

@@ -29,7 +29,7 @@ export default function LanguageSwitcher() {
       {({ open }) => (
         <div className="relative z-10 lg:top-[1px]">
           <Listbox.Button className="text-skin-base relative w-full px-2  py-2 text-start  rounded-lg shadow-md focus:outline-none cursor-pointer">
-            <span className="flex truncate items-center text-sm lg:text-15px">
+            <span className="flex border p-2 rounded truncate items-center text-sm lg:text-15px">
               <span className="leading-5 mr-1">{t(selectedItem.name)}</span>
               <MdKeyboardArrowDown size={20} />
             </span>

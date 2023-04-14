@@ -25,6 +25,9 @@ const BannerCard: React.FC<BannerProps> = ({
   const { width } = useWindowSize();
   const { slug, title, image } = banner;
   const selectedImage = getImage(width!, image);
+
+  console.log(selectedImage);
+  
   return (
     <div className={cn('mx-auto', className)}>
       <Link
@@ -35,6 +38,7 @@ const BannerCard: React.FC<BannerProps> = ({
         )}
       >
         <Image
+          objectFit='cover'
           src={selectedImage.url}
           width={selectedImage.width}
           height={selectedImage.height}
