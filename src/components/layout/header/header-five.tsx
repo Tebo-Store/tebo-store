@@ -70,7 +70,7 @@ const Header: React.FC = () => {
         />
         {/* End of Mobile search */}
         <Container className="top-bar h-16 lg:h-auto flex items-center justify-between py-3 border-b border-skin-base">
-          <div className="relative flex-shrink-0 lg:hidden">
+          {/* <div className="relative flex-shrink-0 lg:hidden">
             <button
               className="border border-skin-base rounded-md focus:outline-none flex-shrink-0 text-sm lg:text-15px font-medium text-skin-base px-2.5 md:px-3 lg:px-[18px] py-2 md:py-2.5 lg:py-3 flex items-center transition-all hover:border-skin-four"
               onClick={handleCategoryMenu}
@@ -83,10 +83,10 @@ const Header: React.FC = () => {
             {categoryMenu && (
               <CategoryDropdownMenu className="mt-3 md:mt-2.5" />
             )}
-          </div>
+          </div> */}
           {/* End of Category */}
 
-          <Logo className="logo -mt-1.5 md:-mt-1 me-auto ps-3 md:ps-0 md:ms-auto lg:mx-0" />
+          <Logo className="logo -mt-1.5 md:-mt-1 md:ps-0 lg:mx-0" />
           {/* End of logo */}
 
           <Search
@@ -133,7 +133,7 @@ const Header: React.FC = () => {
               data={site_header.menu}
               className="flex transition-all duration-200 ease-in-out"
             />
-            {/* End of main menu
+            {/* End of main menu */}
 
             {displaySearch && (
               <div className="sticky-search w-full absolute top-0 left-0 px-4 flex items-center justify-center h-full">

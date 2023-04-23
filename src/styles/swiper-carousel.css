@@ -64,11 +64,10 @@
 }
 #productGalleryThumbs .swiper-wrapper {
   display: flex;
-  flex-wrap: wrap;
-  margin: -5px;
 }
 #productGalleryThumbs .swiper-wrapper .swiper-slide {
-  margin: 5px 5px 6px;
+  border: 1px solid transparent;
+  border-radius: 4px;
 }
 #productGalleryThumbs .swiper-wrapper .swiper-slide.swiper-slide-thumb-active {
   border-color: #80d8c7;

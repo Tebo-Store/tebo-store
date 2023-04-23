@@ -7,22 +7,26 @@ import RelatedProductFeed from '@components/product/feeds/related-product-feed';
 import Breadcrumb from '@components/ui/breadcrumb';
 import { useUI } from '@contexts/ui.context';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Divider from '@components/ui/divider';
+import { MyProduct } from '@framework/types';
 
-export default function ProductPage() {
+export default function ProductPage({
+  product,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  
   return (
     <>
       <Divider />
       <div className="pt-6 lg:pt-7">
         <Container>
           <Breadcrumb />
-          <ProductSingleDetails />
+          <ProductSingleDetails product={product} />
         </Container>
       </div>
 
-      <RelatedProductFeed uniqueKey="related-products" />
-      <PopcornJerkyProductFeed />
+      {/* <RelatedProductFeed uniqueKey="related-products" /> */}
+      {/* <PopcornJerkyProductFeed /> */}
       <DownloadApps />
     </>
   );
@@ -30,9 +34,17 @@ export default function ProductPage() {
 
 ProductPage.Layout = Layout;
 
-export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
+export const getServerSideProps: GetServerSideProps<{
+  product: MyProduct;
+}> = async ({ locale, params }) => {
+  const { slug } = params;
+
+  const response = await fetch(`${process.env.API}/api/v1/products/${slug}`);
+  const product: MyProduct = await response.json();
+
   return {
     props: {
+      product,
       ...(await serverSideTranslations(locale!, [
         'common',
         'forms',

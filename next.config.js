@@ -12,4 +12,7 @@ module.exports = withPWA({
   typescript: {
     ignoreBuildErrors: true,
   },
+  images: {
+    domains: ['admin.tebo.uz'],
+  },
 });

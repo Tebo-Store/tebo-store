@@ -25,8 +25,6 @@ const BannerCard: React.FC<BannerProps> = ({
   const { width } = useWindowSize();
   const { slug, title, image } = banner;
   const selectedImage = getImage(width!, image);
-
-  console.log(selectedImage);
   
   return (
     <div className={cn('mx-auto', className)}>

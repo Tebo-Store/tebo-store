@@ -2,24 +2,23 @@ import type { FC } from 'react';
 import { useBestSellerGroceryProductsQuery } from '@framework/product/get-all-best-seller-grocery-products';
 import ProductsGridBlock from '../products-grid-block';
 import { LIMITS } from '@framework/utils/limits';
+import { MyProduct } from '@framework/types';
 
 interface ProductFeedProps {
   className?: string;
+  products: MyProduct[];
 }
 
-const BestSellerGroceryProductFeed: FC<ProductFeedProps> = ({ className }) => {
-  const { data, isLoading, error } = useBestSellerGroceryProductsQuery({
-    limit: LIMITS.BEST_SELLER_GROCERY_PRODUCTS_LIMITS,
-  });
+const BestSellerGroceryProductFeed: FC<ProductFeedProps> = ({
+  className,
+  products,
+}) => {
   return (
     <ProductsGridBlock
       sectionHeading="text-best-grocery-near-you"
       sectionSubHeading="text-fresh-grocery-items"
       className={className}
-      products={data}
-      loading={isLoading}
-      error={error?.message}
-      limit={LIMITS.BEST_SELLER_GROCERY_PRODUCTS_LIMITS}
+      products={products}
       uniqueKey="best-sellers"
     />
   );

@@ -1,28 +1,31 @@
 import cn from 'classnames';
 import Image from '@components/ui/image';
-import { Product } from '@framework/types';
+import { MyProduct } from '@framework/types';
 import { useModalAction } from '@components/common/modal/modal.context';
-import { AddToCart } from '@components/product/add-to-cart';
 import { useTranslation } from 'next-i18next';
-import { productPlaceholder } from '@assets/placeholders';
 import { toDividePrice } from '@utils/toDividePrice';
 import Link from 'next/link';
 import { useMemo } from 'react';
 import { MdAddShoppingCart, MdDone } from 'react-icons/md';
 import { useShoppingCart } from '@contexts/myCart/cart';
+import { useRouter } from 'next/router';
+
+type Locale = 'ru' | 'uz';
 
 interface ProductProps {
-  product: any;
+  product: MyProduct;
   className?: string;
 }
 const ProductCard: React.FC<ProductProps> = ({ product, className }) => {
-  const { name, image } = product ?? {};
   const { openModal } = useModalAction();
-  const { getItem, increaseCartQuantity, removeProductFromCart } =
+  const { getItem, addProductFromCart, removeProductFromCart } =
     useShoppingCart();
   const { t } = useTranslation('common');
 
-  const item = getItem(product);
+  const item = getItem(product.id);
+
+  const router = useRouter();
+  const locale: Locale = router.locale as Locale;
 
   function handlePopupView() {
     openModal('PRODUCT_CREDIT', product);
@@ -73,12 +76,12 @@ const ProductCard: React.FC<ProductProps> = ({ product, className }) => {
           <a>
             <div className="flex overflow-hidden max-w-[230px] mx-auto transition duration-200 ease-in-out transform group-hover:scale-105 relative">
               <Image
-                src={image?.thumbnail}
-                alt={name || 'Product Image'}
+                src={product.def_image}
+                alt={product.name_ru || 'Product Image'}
                 width={230}
                 height={200}
                 quality={100}
-                className="object-cover bg-skin-thumbnail"
+                className="object-cover"
               />
             </div>
           </a>
@@ -89,7 +92,7 @@ const ProductCard: React.FC<ProductProps> = ({ product, className }) => {
         <Link href={`products/${product.slug}`}>
           <a>
             <h3 className="text-skin-base text-xs sm:text-sm lg:text-base font-medium line-clamp-2 mb-2 sm:mb-3">
-              {name}
+              {product[`name_${locale}`]}
             </h3>
           </a>
         </Link>
@@ -127,14 +130,14 @@ const ProductCard: React.FC<ProductProps> = ({ product, className }) => {
         </button>
         {item ? (
           <button
-            onClick={() => removeProductFromCart(product)}
+            onClick={() => removeProductFromCart(item)}
             className="border rounded-md px-2 sm:px-3"
           >
             <MdDone size={20} />
           </button>
         ) : (
           <button
-            onClick={() => increaseCartQuantity(product)}
+            onClick={() => addProductFromCart(product)}
             className="border rounded-md px-2 sm:px-3"
           >
             <MdAddShoppingCart size={20} />

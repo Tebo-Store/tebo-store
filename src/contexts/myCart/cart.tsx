@@ -1,20 +1,21 @@
 import { createContext, ReactNode, useContext } from 'react';
 import { useLocalStorage } from '@utils/useLocalStorage';
 
-import { Product } from '@framework/types';
+import { MyProduct, Product } from '@framework/types';
 
 type ShoppingCartProviderProps = {
   children: ReactNode;
 };
 
-interface CartItem extends Product {
+export interface CartItem extends MyProduct {
   qty: number;
 }
 
 type ShoppingCartContext = {
-  getItem: (product: CartItem) => CartItem | undefined;
+  getItem: (productId: number) => CartItem | undefined;
   increaseCartQuantity: (product: CartItem) => void;
   decreaseCartQuantity: (product: CartItem) => void;
+  addProductFromCart: (product: MyProduct) => void;
   removeProductFromCart: (product: CartItem) => void;
   clearCart: () => void;
   cartQuantity: number;
@@ -35,12 +36,12 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
 
   const cartQuantity = cartItems.length;
 
-  function getItem(product: CartItem) {
-    return cartItems.find((item) => item.id === product.id);
+  function getItem(productId: number) {
+    return cartItems.find((item) => item.id === productId);
   }
   function increaseCartQuantity(product: CartItem) {
     setCartItems((currItems) => {
-      if (currItems.find((item) => item.id === product.id) == null) {
+      if (currItems.find((item) => item.id === product.id) === null) {
         return [...currItems, { ...product, qty: 1 }];
       } else {
         return currItems.map((item) => {
@@ -69,6 +70,12 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     });
   }
 
+  function addProductFromCart(product: MyProduct) {
+    setCartItems((currItems) => {
+      return [...currItems, { ...product, qty: 1 }];
+    });
+  }
+
   function removeProductFromCart(product: CartItem) {
     setCartItems((currItems) => {
       return currItems.filter((item) => item.id !== product.id);
@@ -92,6 +99,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
         getItem,
         increaseCartQuantity,
         decreaseCartQuantity,
+        addProductFromCart,
         removeProductFromCart,
         clearCart,
         cartItems,

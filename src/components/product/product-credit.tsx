@@ -1,7 +1,11 @@
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
+import Image from '@components/ui/image';
 
-import { useModalAction } from '@components/common/modal/modal.context';
+import {
+  useModalAction,
+  useModalState,
+} from '@components/common/modal/modal.context';
 import { useInstallmentContext } from '@contexts/installment';
 
 import CloseButton from '@components/ui/close-button';
@@ -11,11 +15,13 @@ import { toDividePrice } from '@utils/toDividePrice';
 
 export default function ProductCredit() {
   const { setInstallmentProduct } = useInstallmentContext();
-  const { closeModal, openModal } = useModalAction();
+  const { closeModal } = useModalAction();
+  const { data } = useModalState();
 
   const router = useRouter();
+  const locale = router.locale;
 
-  const productPrice = 1000000;
+  const productPrice = data.sale_price ? data.sale_price : data.price;
   const margin = 90;
 
   const minFirstPayment = (productPrice * 25) / 100;
@@ -82,11 +88,25 @@ export default function ProductCredit() {
     <div className="p-5 w-full md:w-[450px] bg-skin-fill rounded-lg shadow-dropDown">
       <CloseButton onClick={closeModal} />
 
-      <div className="mb-4">
-        <h2 className="text-lg font-bold">Купить в рассрочку</h2>
+      <h2 className="text-lg font-bold mb-4">Купить в рассрочку</h2>
 
-        <div>Сам продукт</div>
-        <div>Цена продукта: {productPrice}</div>
+      <div className="flex items-stretch mb-4">
+        <div className="relative w-20 h-20 md:w-[100px] md:h-[100px] flex-shrink-0">
+          <Image
+            src={data.def_image}
+            layout="fill"
+            alt="Product image"
+            className="object-contain"
+          />
+        </div>
+        <div className="ml-3">
+          <h3 className="text-sm md:text-base font-semibold">
+            {data[`name_${locale}`]}
+          </h3>
+          <div className="mt-2">
+            {toDividePrice(data.sale_price ? data.sale_price : data.price)} сум
+          </div>
+        </div>
       </div>
 
       <div className="space-y-4">
@@ -175,6 +195,7 @@ export default function ProductCredit() {
               month: +month,
               totalPrice,
               monthlyPayment,
+              product: data,
             })
           );
           router.push('/installment');

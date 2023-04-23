@@ -58,6 +58,57 @@ export type Collection = {
   products?: Product[];
   productCount?: number;
 };
+
+export interface ResponseProducts {
+  data: MyProduct[];
+}
+
+export interface MyProduct {
+  id: number;
+  name_ru: string;
+  name_uz: string;
+  description_ru: string;
+  description_uz: string;
+  brand_id: null;
+  SKU: string;
+  status: string;
+  isFeatured: number;
+  price: number;
+  sale_price: number | null;
+  quantity: number;
+  attributes_ru: {
+    [key: string]: string;
+  };
+  attributes_uz: {
+    [key: string]: string;
+  };
+  meta_keywords_ru: string[];
+  meta_keywords_uz: string[];
+  installment_available: number;
+  images: string[];
+  slug: string;
+  default_image: string;
+  tariff_id: string;
+  gallery: string[];
+  def_image: string;
+}
+
+export interface ResponseBrands {
+  data: MyBrand[];
+}
+
+export interface MyBrand {
+  id: number;
+  name_ru: string;
+  name_uz: string;
+  description_ru: string;
+  description_uz: string;
+  status: number;
+  slug: string;
+  default_image: string;
+  image_path: string;
+}
+
 export type Brand = {
   id: number | string;
   name: string;

@@ -12,16 +12,14 @@ import DeleteIcon from '@components/icons/delete-icon';
 import { useShoppingCart } from '@contexts/myCart/cart';
 import Button from '@components/ui/button';
 import { useRouter } from 'next/router';
+import { toDividePrice } from '@utils/toDividePrice';
 
 export default function Cart() {
   const { cartItems, totalPrice, clearCart } = useShoppingCart();
   const { t } = useTranslation('common');
   const router = useRouter();
   const { closeDrawer } = useUI();
-  const { price: cartTotal } = usePrice({
-    amount: totalPrice,
-    currencyCode: 'USD',
-  });
+
   return (
     <div className="flex flex-col w-full h-full justify-between">
       <div className="w-full flex justify-between items-center relative ps-5 md:ps-7 border-b border-skin-base">
@@ -59,20 +57,19 @@ export default function Cart() {
         <EmptyCart />
       )}
       <div className="border-t border-skin-base px-5 md:px-7 pt-5 md:pt-6 pb-5 md:pb-6">
-        <div className="flex pb-5 md:pb-7">
+        <div className="flex justify-between items-start pb-5 md:pb-5">
           <div className="pe-3">
-            <Heading className="mb-2.5">{t('text-sub-total')}:</Heading>
-            <Text className="leading-6">
-              {t('text-cart-final-price-discount')}
-            </Text>
+            <Heading>{t('text-sub-total')}:</Heading>
           </div>
           <div className="flex-shrink-0 font-semibold text-base md:text-lg text-skin-base -mt-0.5 min-w-[80px] text-end">
-            {cartTotal}
+            {toDividePrice(totalPrice)} сум
           </div>
         </div>
         <div className="flex flex-col" onClick={closeDrawer}>
           <Button
-            onClick={() => router.push(ROUTES.CHECKOUT)}
+            onClick={() => {
+              router.push(ROUTES.CHECKOUT);
+            }}
             disabled={!(cartItems.length > 0)}
           >
             {t('text-proceed-to-checkout')}

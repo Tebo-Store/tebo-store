@@ -6,7 +6,7 @@ import BundleGrid from '@components/bundle/bundle-grid-two';
 import CollectionGrid from '@components/common/collection-grid';
 import BestSellerGroceryProductFeed from '@components/product/feeds/best-seller-grocery-product-feed';
 import { bundleDataThree as bundle } from '@framework/static/bundle';
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Seo from '@components/seo/seo';
 import { QueryClient } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
@@ -22,8 +22,13 @@ import { elegantBannerGrid as banners } from '@framework/static/banner';
 import FeatureCarousel from '@components/common/featured-carousel';
 import PopularProductWithBestDeals from '@components/product/popular-product-with-best-deals';
 import ProductsSlider from '@components/product/products-slider';
+import http from '@framework/utils/http';
+import { ResponseBrands, ResponseProducts } from '@framework/types';
 
-export default function Home() {
+export default function Home({
+  brands,
+  products,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <>
       <Seo
@@ -37,14 +42,17 @@ export default function Home() {
           data={bannersHero}
           className="my-3 md:my-4 lg:mt-0 lg:mb-5 xl:mb-6"
         />
-        <FeatureCarousel />
-        <ProductsSlider />
-        <BestSellerGroceryProductFeed className="mb-12 lg:mb-14 xl:mb-16 2xl:mb-20" />
+        <FeatureCarousel brands={brands.data} />
+        {/* <ProductsSlider /> */}
+        <BestSellerGroceryProductFeed
+          products={products.data}
+          className="mb-12 lg:mb-14 xl:mb-16 2xl:mb-20"
+        />
         <BundleGrid
           className="mb-12 lg:mb-14 xl:mb-16 2xl:mb-20"
           data={bundle}
         />
-        <PopularProductWithBestDeals />
+        {/* <PopularProductWithBestDeals /> */}
         <BannerGridTwo
           data={banners}
           className="mb-12 lg:mb-14 xl:mb-16 2xl:mb-20"
@@ -63,31 +71,20 @@ export default function Home() {
 
 Home.Layout = Layout;
 
-export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
-  const queryClient = new QueryClient();
+export const getServerSideProps: GetServerSideProps<{
+  brands: ResponseBrands;
+  products: ResponseProducts;
+}> = async ({ locale }) => {
+  const responseBrands = await fetch(`${process.env.API}/api/v1/brands`);
+  const brands: ResponseBrands = await responseBrands.json();
 
-  await queryClient.prefetchQuery(
-    [API_ENDPOINTS.CATEGORIES, { limit: LIMITS.CATEGORIES_LIMITS }],
-    fetchCategories
-  );
-  await queryClient.prefetchQuery(
-    [
-      API_ENDPOINTS.BEST_SELLER_GROCERY_PRODUCTS,
-      { limit: LIMITS.BEST_SELLER_GROCERY_PRODUCTS_LIMITS },
-    ],
-    fetchBestSellerGroceryProducts
-  );
-  await queryClient.prefetchQuery(
-    [
-      API_ENDPOINTS.POPULAR_PRODUCTS,
-      { limit: LIMITS.POPULAR_PRODUCTS_TWO_LIMITS },
-    ],
-    fetchPopularProducts
-  );
+  const responseProducts = await fetch(`${process.env.API}/api/v1/products`);
+  const products: ResponseProducts = await responseProducts.json();
 
   return {
     props: {
-      dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
+      brands,
+      products,
       ...(await serverSideTranslations(locale!, [
         'common',
         'forms',

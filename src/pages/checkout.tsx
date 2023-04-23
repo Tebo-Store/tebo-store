@@ -15,8 +15,11 @@ import { toDividePrice } from '@utils/toDividePrice';
 import Counter from '@components/ui/counter';
 import { useUI } from '@contexts/ui.context';
 
+type Locale = 'ru' | 'uz';
+
 export default function CheckoutPage() {
   const router = useRouter();
+  const locale: Locale = router.locale as Locale;
   const {
     cartItems,
     decreaseCartQuantity,
@@ -46,19 +49,18 @@ export default function CheckoutPage() {
                       key={item.id}
                       className="flex items-center text-left border-b first-of-type:border-t py-2 md:py-4"
                     >
-                      <div className="flex-shrink-0 w-[100px] h-[100px] md:w-[130px] md:h-[130px]">
+                      <div className="relative flex-shrink-0 w-[100px] h-[100px] md:w-[130px] md:h-[130px]">
                         <Image
-                          src={item.image.original}
-                          alt={item.name || 'Product Image'}
-                          width={180}
-                          height={180}
+                          src={item.def_image}
+                          alt={item.slug || 'Product Image'}
+                          layout='fill'
                           quality={100}
-                          className="object-cover bg-skin-thumbnail"
+                          className="object-cover"
                         />
                       </div>
                       <div className="ml-3 flex-grow">
                         <h3 className="text-sm md:text-lg font-bold mb-2 md:mb-3">
-                          {item.name}
+                          {item[`name_${locale}`]}
                         </h3>
                         <div className="text-sm md:text-base">
                           {item.qty} x {toDividePrice(item.price * item.qty)}{' '}

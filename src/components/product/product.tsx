@@ -1,225 +1,148 @@
-import { useState } from 'react';
 import Button from '@components/ui/button';
 import Counter from '@components/ui/counter';
-import { useRouter } from 'next/router';
-import { ROUTES } from '@utils/routes';
-import useWindowSize from '@utils/use-window-size';
-import { useProductQuery } from '@framework/product/get-product';
-import { getVariations } from '@framework/utils/get-variations';
-import usePrice from '@framework/product/use-price';
-import { useCart } from '@contexts/cart/cart.context';
-import { generateCartItem } from '@utils/generate-cart-item';
-import ProductAttributes from '@components/product/product-attributes';
-import isEmpty from 'lodash/isEmpty';
-import { toast } from 'react-toastify';
 import ThumbnailCarousel from '@components/ui/carousel/thumbnail-carousel';
-import { useTranslation } from 'next-i18next';
-import Image from '@components/ui/image';
-import CartIcon from '@components/icons/cart-icon';
-import { IoIosHeart, IoIosHeartEmpty } from 'react-icons/io';
-import TagLabel from '@components/ui/tag-label';
-import LabelIcon from '@components/icons/label-icon';
-import { IoArrowRedoOutline } from 'react-icons/io5';
-import SocialShareBox from '@components/ui/social-share-box';
-import ProductDetailsTab from '@components/product/product-details/product-tab';
-import VariationPrice from './variation-price';
-import isEqual from 'lodash/isEqual';
 import { useShoppingCart } from '@contexts/myCart/cart';
 import { useModalAction } from '@components/common/modal/modal.context';
+import { MyProduct } from '@framework/types';
+import { useRouter } from 'next/router';
+import { toDividePrice } from '@utils/toDividePrice';
+import { useMemo } from 'react';
 
-const ProductSingleDetails: React.FC = () => {
-  const { decreaseCartQuantity, increaseCartQuantity, getItem } =
-    useShoppingCart();
+type Locale = 'ru' | 'uz';
 
-  const { t } = useTranslation('common');
-  const router = useRouter();
+const ProductSingleDetails = ({ product }: { product: MyProduct }) => {
   const {
-    query: { slug },
-  } = router;
-  const { width } = useWindowSize();
-  const { data, isLoading } = useProductQuery(slug as string);
+    decreaseCartQuantity,
+    increaseCartQuantity,
+    addProductFromCart,
+    getItem,
+  } = useShoppingCart();
+
+  const router = useRouter();
+  const locale: Locale = router.locale as Locale;
   const { openModal } = useModalAction();
 
-  const { addItemToCart, isInCart, getItemFromCart, isInStock } = useCart();
-  const [selectedQuantity, setSelectedQuantity] = useState(1);
-  const [attributes, setAttributes] = useState<{ [key: string]: string }>({});
-  const [favorite, setFavorite] = useState<boolean>(false);
-  const [quantity, setQuantity] = useState(1);
-  const [addToCartLoader, setAddToCartLoader] = useState<boolean>(false);
-  const [addToWishlistLoader, setAddToWishlistLoader] =
-    useState<boolean>(false);
-  const [shareButtonStatus, setShareButtonStatus] = useState<boolean>(false);
-  const productUrl = `${process.env.NEXT_PUBLIC_SITE_URL}${ROUTES.PRODUCT}/${router.query.slug}`;
-  const { price, basePrice, discount } = usePrice(
-    data && {
-      amount: data.sale_price ? data.sale_price : data.price,
-      baseAmount: data.price,
-      currencyCode: 'USD',
+  const firstPayment = useMemo(() => {
+    if (product.sale_price) {
+      return (product.sale_price * 25) / 100;
     }
-  );
-  const handleChange = () => {
-    setShareButtonStatus(!shareButtonStatus);
-  };
-  if (isLoading) return <p>Loading...</p>;
-  const variations = getVariations(data?.variations);
+    return (product.price * 25) / 100;
+  }, []);
 
-  const isSelected = !isEmpty(variations)
-    ? !isEmpty(attributes) &&
-      Object.keys(variations).every((variation) =>
-        attributes.hasOwnProperty(variation)
-      )
-    : true;
-  let selectedVariation: any = {};
-  if (isSelected) {
-    const dataVaiOption: any = data?.variation_options;
-    selectedVariation = dataVaiOption?.find((o: any) =>
-      isEqual(
-        o.options.map((v: any) => v.value).sort(),
-        Object.values(attributes).sort()
-      )
+  const month = 12;
+
+  const annuetit = useMemo(() => {
+    const percent = 90 / 100;
+    const BeforeB = Math.pow(1 + Number(percent) / 12, Number(month));
+    const A =
+      (Number(percent) / 12) *
+      Math.pow(1 + Number(percent) / 12, Number(month));
+    const B = BeforeB - 1;
+
+    return A / B;
+  }, []);
+
+  const monthlyPayment = useMemo(() => {
+    const productPrice = product.sale_price
+      ? product.sale_price
+      : product.price;
+    return (
+      Math.round((annuetit * (productPrice - Number(firstPayment))) / 1000) *
+      1000
     );
-  }
-  const item = generateCartItem(data!, selectedVariation);
-  const outOfStock = isInCart(item.id) && !isInStock(item.id);
-  function addToCart() {
-    if (!isSelected) return;
-    // to show btn feedback while product carting
-    setAddToCartLoader(true);
-    setTimeout(() => {
-      setAddToCartLoader(false);
-    }, 1500);
+  }, []);
 
-    const item = generateCartItem(data!, selectedVariation);
-    addItemToCart(item, quantity);
-    toast('Added to the bag', {
-      progressClassName: 'fancy-progress-bar',
-      position: width! > 768 ? 'bottom-right' : 'top-right',
-      autoClose: 1500,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-    });
-  }
-  function addToWishlist() {
-    // to show btn feedback while product wishlist
-    setAddToWishlistLoader(true);
-    setFavorite(!favorite);
-    const toastStatus: string =
-      favorite === true ? t('text-remove-favorite') : t('text-added-favorite');
-    setTimeout(() => {
-      setAddToWishlistLoader(false);
-    }, 1500);
-    toast(toastStatus, {
-      progressClassName: 'fancy-progress-bar',
-      position: width! > 768 ? 'bottom-right' : 'top-right',
-      autoClose: 1500,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-    });
-  }
+  const cartItem = getItem(product.id);
 
   return (
-    <div className="pt-6 md:pt-7 pb-2">
-      <div className="lg:grid grid-cols-10 gap-7 2xl:gap-8">
-        <div className="col-span-5 xl:col-span-6 overflow-hidden mb-6 md:mb-8 lg:mb-0">
-          {!!data?.gallery?.length ? (
-            <ThumbnailCarousel
-              gallery={data?.gallery}
-              thumbnailClassName="xl:w-[700px] 2xl:w-[900px]"
-              galleryClassName="xl:w-[150px] 2xl:w-[170px]"
-            />
-          ) : (
-            <div className="w-auto flex items-center justify-center">
-              <Image
-                src={data?.image?.original ?? '/product-placeholder.svg'}
-                alt={data?.name!}
-                width={900}
-                height={680}
-              />
-            </div>
-          )}
-        </div>
+    <div className="py-6">
+      <div className="flex flex-col xl:flex-row xl:items-start xl:space-x-7">
+        <ThumbnailCarousel gallery={product.gallery} />
 
-        <div className="flex-shrink-0 flex flex-col col-span-5 xl:col-span-4 xl:ps-2">
-          <div className="pb-3 lg:pb-5">
-            <div className="md:mb-2.5 block -mt-1.5">
-              <h2 className="text-skin-base text-lg md:text-xl xl:text-2xl font-medium transition-colors duration-300">
-                {data?.name}
-              </h2>
-            </div>
-            {/* {data?.unit && isEmpty(variations) ? (
-              <div className="text-sm md:text-15px font-medium">
-                {data?.unit}
-              </div>
-            ) : (
-              <VariationPrice
-                selectedVariation={selectedVariation}
-                minPrice={data?.min_price}
-                maxPrice={data?.max_price}
-              />
-            )} */}
+        <div className="xl:w-1/2">
+          <h2 className="mb-5 text-skin-base text-lg md:text-xl xl:text-2xl font-medium">
+            {product[`name_${locale}`]}
+          </h2>
 
-            {isEmpty(variations) && (
-              <div className="flex items-center mt-5">
-                <div className="text-skin-base font-bold text-base md:text-xl xl:text-[22px]">
-                  {price}
-                </div>
-                {discount && (
-                  <del className="text-sm md:text-15px ps-3 text-skin-base text-opacity-50">
-                    {basePrice}
+          <div className="flex space-x-5 mb-4 md:space-x-7">
+            <div>
+              {product.sale_price ? (
+                <>
+                  <p>Цена</p>
+                  <div className="text-sm md:text-lg font-semibold mt-1">
+                    {toDividePrice(product.sale_price)} сум
+                  </div>
+                  <del className="text-sm md:text-base">
+                    {toDividePrice(product.price)} сум
                   </del>
-                )}
+                </>
+              ) : (
+                <>
+                  <p>Цена</p>
+                  <div className="text-sm md:text-lg font-semibold mt-1">
+                    {toDividePrice(product.price)} сум
+                  </div>
+                </>
+              )}
+            </div>
+            <div>
+              <p>В рассрочку</p>
+              <div className="text-sm md:text-lg text-skin-primary font-semibold mt-1">
+                от {toDividePrice(monthlyPayment)} сум/мес
               </div>
-            )}
+            </div>
           </div>
 
           <div className="pt-1.5 lg:pt-3 xl:pt-4 space-y-2.5 md:space-y-3.5">
-            {getItem(data) ? (
+            {cartItem ? (
               <Counter
                 variant="single"
-                value={getItem(data)?.qty}
-                onIncrement={() => increaseCartQuantity(data)}
-                onDecrement={() => decreaseCartQuantity(data)}
-                disabled={data.quantity <= getItem(data).qty}
+                value={cartItem.qty}
+                onIncrement={() => increaseCartQuantity(cartItem)}
+                onDecrement={() => decreaseCartQuantity(cartItem)}
+                disabled={product.quantity <= cartItem.qty}
               />
             ) : (
               <Button
                 variant="border"
-                onClick={() => increaseCartQuantity(data)}
+                onClick={() => addProductFromCart(product)}
                 className="w-full px-1.5"
-                loading={addToCartLoader}
               >
-                Купить в один клик
+                Добавить в корзину
               </Button>
             )}
 
             <Button
               onClick={() => {
-                openModal('PRODUCT_CREDIT', data);
+                openModal('PRODUCT_CREDIT', product);
               }}
               className="w-full px-1.5"
             >
               В рассрочку
             </Button>
           </div>
-          {data?.tag && (
-            <ul className="pt-5 xl:pt-6">
-              <li className="text-sm md:text-15px text-skin-base text-opacity-80 inline-flex items-center justify-center me-2 relative top-1">
-                <LabelIcon className="me-2" /> {t('text-tags')}:
-              </li>
-              {data?.tag?.map((item: any) => (
-                <li className="inline-block p-[3px]" key={`tag-${item.id}`}>
-                  <TagLabel data={item} />
-                </li>
-              ))}
-            </ul>
-          )}
+
+          <div className="mt-4 space-y-3 md:space-y-4">
+            <h3 className="text-xl font-semibold">Характеристики:</h3>
+            {Object.entries(product[`attributes_${locale}`]).map(
+              ([key, value]) => (
+                <div className="md:flex items-center">
+                  <p className="md:mr-5 md:w-64 mb-0 text-sm text-gray-400">
+                    {key}
+                  </p>
+                  <p className="mb-0 text-sm font-medium">{value}</p>
+                </div>
+              )
+            )}
+          </div>
         </div>
       </div>
-      <ProductDetailsTab />
+      <h3 className="mt-5 mb-2 text-xl font-semibold">Описание:</h3>
+      <div
+        dangerouslySetInnerHTML={{
+          __html: product[`description_${locale}`],
+        }}
+      />
     </div>
   );
 };

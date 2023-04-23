@@ -1,77 +1,47 @@
 import {
   Swiper,
   SwiperSlide,
-  SwiperOptions,
   Navigation,
   Thumbs,
 } from '@components/ui/carousel/slider';
 import Image from '@components/ui/image';
 import { useRef, useState } from 'react';
-import cn from 'classnames';
-import { productGalleryPlaceholder } from '@assets/placeholders';
-import { getDirection } from '@utils/get-direction';
-import { useRouter } from 'next/router';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 
 interface Props {
-  gallery: any[];
-  thumbnailClassName?: string;
-  galleryClassName?: string;
+  gallery: string[];
 }
 
-// product gallery breakpoints
-const galleryCarouselBreakpoints = {
-  '0': {
-    slidesPerView: 4,
-  },
-};
-
-const swiperParams: SwiperOptions = {
-  slidesPerView: 1,
-  spaceBetween: 0,
-};
-
-const ThumbnailCarousel: React.FC<Props> = ({
-  gallery,
-  thumbnailClassName = 'xl:w-[480px] 2xl:w-[650px]',
-  galleryClassName = 'xl:w-28 2xl:w-[130px]',
-}) => {
+const ThumbnailCarousel: React.FC<Props> = ({ gallery }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
   const prevRef = useRef<HTMLDivElement>(null);
   const nextRef = useRef<HTMLDivElement>(null);
-  const { locale } = useRouter();
-  const dir = getDirection(locale);
 
   return (
-    <div className="w-full xl:flex xl:flex-row-reverse">
-      <div
-        className={cn(
-          'w-full xl:ms-5 mb-2.5 md:mb-3 border border-skin-base overflow-hidden rounded-md relative',
-          thumbnailClassName
-        )}
-      >
+    <div className="mb-5 lg:mb-6 xl:mb-0 lg:grid lg:grid-cols-12 lg:gap-5 xl:w-1/2">
+      <div className="relative mb-5 lg:mb-0 lg:col-span-10 lg:order-2">
         <Swiper
           id="productGallery"
+          spaceBetween={20}
           thumbs={{ swiper: thumbsSwiper }}
           modules={[Navigation, Thumbs]}
           navigation={{
             prevEl: prevRef.current!, // Assert non-null
             nextEl: nextRef.current!, // Assert non-null
           }}
-          {...swiperParams}
         >
-          {gallery?.map((item: any) => (
-            <SwiperSlide
-              key={`product-gallery-${item.id}`}
-              className="flex items-center justify-center"
-            >
-              <Image
-                src={item?.original ?? productGalleryPlaceholder}
-                alt={`Product gallery ${item.id}`}
-                width={650}
-                height={590}
-                className="rounded-lg"
-              />
+          {gallery.map((item) => (
+            <SwiperSlide key={`product-gallery-${item}`}>
+              <div className="relative w-full h-96 sm:h-[450px] md:h-[500px] lg:h-[550px] xl:h-[600px] border border-1 rounded-lg">
+                <Image
+                  sizes="(min-width: 1280px) 50vw, 100vw"
+                  src={item}
+                  alt={`Product gallery ${item}`}
+                  layout="fill"
+                  className="rounded-lg object-contain"
+                  quality={100}
+                />
+              </div>
             </SwiperSlide>
           ))}
         </Swiper>
@@ -80,44 +50,50 @@ const ThumbnailCarousel: React.FC<Props> = ({
             ref={prevRef}
             className="w-7 h-7 md:w-8 md:h-8 lg:w-9 lg:h-9 xl:w-10 xl:h-10 text-base lg:text-lg xl:text-xl flex items-center cursor-pointer justify-center rounded-full bg-skin-fill transition duration-300 hover:bg-skin-primary hover:text-skin-inverted focus:outline-none transform -translate-y-1/2 shadow-navigation"
           >
-            {dir === 'rtl' ? <IoIosArrowForward /> : <IoIosArrowBack />}
+            {<IoIosArrowBack />}
           </div>
           <div
             ref={nextRef}
             className="w-7 h-7 md:w-8 md:h-8 lg:w-9 lg:h-9 xl:w-10 xl:h-10 text-base lg:text-lg xl:text-xl flex items-center justify-center cursor-pointer rounded-full bg-skin-fill  transition duration-300 hover:bg-skin-primary hover:text-skin-inverted focus:outline-none transform -translate-y-1/2 shadow-navigation"
           >
-            {dir === 'rtl' ? <IoIosArrowBack /> : <IoIosArrowForward />}
+            {<IoIosArrowForward />}
           </div>
         </div>
       </div>
-      {/* End of product main slider */}
 
-      <div className={`flex-shrink-0 ${galleryClassName}`}>
-        <Swiper
-          id="productGalleryThumbs"
-          onSwiper={setThumbsSwiper}
-          spaceBetween={0}
-          watchSlidesProgress={true}
-          freeMode={true}
-          observer={true}
-          observeParents={true}
-          breakpoints={galleryCarouselBreakpoints}
-        >
-          {gallery?.map((item: any) => (
-            <SwiperSlide
-              key={`product-thumb-gallery-${item.id}`}
-              className="flex items-center justify-center cursor-pointer rounded overflow-hidden border border-skin-base transition hover:opacity-75"
-            >
+      <Swiper
+        id="productGalleryThumbs"
+        onSwiper={setThumbsSwiper}
+        spaceBetween={12}
+        slidesPerView={'auto'}
+        watchSlidesProgress={true}
+        modules={[Thumbs]}
+        breakpoints={{
+          1024: {
+            spaceBetween: 16,
+            direction: 'vertical',
+          },
+        }}
+        className="lg:col-span-2 lg:order-1 lg:h-[550px] lg:w-full xl:h-[600px]"
+      >
+        {gallery?.map((item) => (
+          <SwiperSlide
+            key={`product-thumb-gallery-${item}`}
+            className="max-w-max lg:!h-auto lg:max-w-none cursor-pointer"
+          >
+            <div className="relative w-20 h-20 lg:w-full lg:h-28 xl:h-20">
               <Image
-                src={item?.thumbnail ?? productGalleryPlaceholder}
-                alt={`Product thumb gallery ${item.id}`}
-                width={170}
-                height={170}
+                sizes="200px"
+                src={item}
+                alt={`Product thumb gallery ${item}`}
+                layout="fill"
+                className="object-contain rounded-[4px]"
+                quality={100}
               />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
+            </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </div>
   );
 };

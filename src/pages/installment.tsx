@@ -14,6 +14,7 @@ import { toDividePrice } from '@utils/toDividePrice';
 import { useModalAction } from '@components/common/modal/modal.context';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import Image from '@components/ui/image';
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -40,49 +41,62 @@ export default function CheckoutPage() {
           {!!installmentData ? (
             <>
               <div className="mb-5 lg:mb-0 lg:w-8/12">
-                <div>Инфо о товаре, Название, Цена, Картинка</div>
-
-                <hr className="my-5" />
+                <div className="lg:flex lg:items-start lg:space-x-5">
+                  <div className="lg:w-1/2 relative w-full h-[300px] md:h-[350px]">
+                    <Image
+                      src={installmentData.product.def_image}
+                      alt={installmentData.product.slug}
+                      layout="fill"
+                      className="object-contain "
+                    />
+                  </div>
+                  <h2 className="lg:w-1/2 text-lg font-semibold">
+                    {installmentData.product[`name_${router.locale}`]}
+                  </h2>
+                </div>
 
                 {isAuthorized && (
-                  <div className="space-y-4">
-                    <h2 className="text-xl font-medium">Ваши данные</h2>
+                  <>
+                    <hr className='my-4' />
+                    <div className="space-y-4">
+                      <h2 className="text-xl font-medium">Ваши данные</h2>
 
-                    <div className="md:flex md:justify-between space-y-5 md:space-y-0 md:space-x-4">
-                      <Input
-                        id="fullName"
-                        label="Дата рождения"
-                        type="date"
-                        variant="solid"
-                        className="md:w-full"
-                      />
+                      <div className="md:flex md:justify-between space-y-5 md:space-y-0 md:space-x-4">
+                        <Input
+                          id="fullName"
+                          label="Дата рождения"
+                          type="date"
+                          variant="solid"
+                          className="md:w-full"
+                        />
 
-                      <Input
-                        id="passport"
-                        label="Серия паспорта"
-                        type="text"
-                        variant="solid"
-                        className="md:w-full"
-                      />
+                        <Input
+                          id="passport"
+                          label="Серия паспорта"
+                          type="text"
+                          variant="solid"
+                          className="md:w-full"
+                        />
+                      </div>
+
+                      <div className="flex md:w-1/2">
+                        <Input
+                          className="flex-grow"
+                          id="card"
+                          placeholder="0000 0000 0000 0000"
+                          label="Номер карты"
+                          variant="solid"
+                        ></Input>
+                        <Input
+                          className="w-[100px] ml-4"
+                          id="term"
+                          placeholder="00/00"
+                          label="Срок"
+                          variant="solid"
+                        ></Input>
+                      </div>
                     </div>
-
-                    <div className="flex md:w-1/2">
-                      <Input
-                        className="flex-grow"
-                        id="card"
-                        placeholder="0000 0000 0000 0000"
-                        label="Номер карты"
-                        variant="solid"
-                      ></Input>
-                      <Input
-                        className="w-[100px] ml-4"
-                        id="term"
-                        placeholder="00/00"
-                        label="Срок"
-                        variant="solid"
-                      ></Input>
-                    </div>
-                  </div>
+                  </>
                 )}
               </div>
               <div className="space-y-4 lg:w-4/12">
