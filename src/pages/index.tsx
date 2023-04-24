@@ -1,33 +1,30 @@
 import Layout from '@components/layout/layout-five';
 import Container from '@components/ui/container';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import DownloadAppsTwo from '@components/common/download-apps-two';
 import BundleGrid from '@components/bundle/bundle-grid-two';
 import CollectionGrid from '@components/common/collection-grid';
 import BestSellerGroceryProductFeed from '@components/product/feeds/best-seller-grocery-product-feed';
 import { bundleDataThree as bundle } from '@framework/static/bundle';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Seo from '@components/seo/seo';
-import { QueryClient } from 'react-query';
-import { dehydrate } from 'react-query/hydration';
-import { API_ENDPOINTS } from '@framework/utils/api-endpoints';
-import { fetchCategories } from '@framework/category/get-all-categories';
-import { fetchBestSellerGroceryProducts } from '@framework/product/get-all-best-seller-grocery-products';
-import { fetchPopularProducts } from '@framework/product/get-all-popular-products';
-import { LIMITS } from '@framework/utils/limits';
 import BannerGridTwo from '@components/common/banner-grid-two';
 import BannerHeroGrid from '@components/common/banner-hero-grid';
 import { bannersGridHero as bannersHero } from '@framework/static/banner';
 import { elegantBannerGrid as banners } from '@framework/static/banner';
 import FeatureCarousel from '@components/common/featured-carousel';
-import PopularProductWithBestDeals from '@components/product/popular-product-with-best-deals';
+import {
+  MyBanner,
+  ResponseBrands,
+  ResponseCollections,
+  ResponseProducts,
+} from '@framework/types';
 import ProductsSlider from '@components/product/products-slider';
-import http from '@framework/utils/http';
-import { ResponseBrands, ResponseProducts } from '@framework/types';
 
 export default function Home({
   brands,
   products,
+  collections,
+  banners,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <>
@@ -39,11 +36,15 @@ export default function Home({
 
       <Container>
         <BannerHeroGrid
-          data={bannersHero}
+          data={banners}
           className="my-3 md:my-4 lg:mt-0 lg:mb-5 xl:mb-6"
         />
         <FeatureCarousel brands={brands.data} />
-        {/* <ProductsSlider /> */}
+
+        {collections.data.map((collection) => (
+          <ProductsSlider key={collection.id} collection={collection} />
+        ))}
+
         <BestSellerGroceryProductFeed
           products={products.data}
           className="mb-12 lg:mb-14 xl:mb-16 2xl:mb-20"
@@ -74,6 +75,8 @@ Home.Layout = Layout;
 export const getServerSideProps: GetServerSideProps<{
   brands: ResponseBrands;
   products: ResponseProducts;
+  collections: ResponseCollections;
+  banners: MyBanner[];
 }> = async ({ locale }) => {
   const responseBrands = await fetch(`${process.env.API}/api/v1/brands`);
   const brands: ResponseBrands = await responseBrands.json();
@@ -81,10 +84,20 @@ export const getServerSideProps: GetServerSideProps<{
   const responseProducts = await fetch(`${process.env.API}/api/v1/products`);
   const products: ResponseProducts = await responseProducts.json();
 
+  const responseCollections = await fetch(
+    `${process.env.API}/api/v1/collections`
+  );
+  const collections: ResponseCollections = await responseCollections.json();
+
+  const responseBanners = await fetch(`${process.env.API}/api/v1/homesliders`);
+  const banners: MyBanner[] = await responseBanners.json();
+
   return {
     props: {
       brands,
       products,
+      collections,
+      banners,
       ...(await serverSideTranslations(locale!, [
         'common',
         'forms',

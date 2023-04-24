@@ -59,6 +59,28 @@ export type Collection = {
   productCount?: number;
 };
 
+export interface MyBanner {
+  id: number;
+  name: string;
+  link: string;
+  image_full_uz: string;
+  image_full_ru: string;
+}
+
+export interface ResponseCollections {
+  data: MyCollection[];
+}
+
+export interface MyCollection {
+  id: number;
+  name_ru: string;
+  name_uz: string;
+  description_ru: string;
+  description_uz: string;
+  slug: string;
+  products: MyProduct[];
+}
+
 export interface ResponseProducts {
   data: MyProduct[];
 }

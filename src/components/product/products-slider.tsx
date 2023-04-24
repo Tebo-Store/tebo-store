@@ -6,25 +6,24 @@ import ProductCard from './product-cards/product-card';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import SectionHeader from '@components/common/section-header';
+import { MyCollection } from '@framework/types';
+import { useRouter } from 'next/router';
 
-const ProductsSlider = () => {
-  const { data, isLoading, error } = useBestSellerGroceryProductsQuery({
-    limit: LIMITS.BEST_SELLER_GROCERY_PRODUCTS_LIMITS,
-  });
+type Locale = 'ru' | 'uz';
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+interface Props {
+  collection: MyCollection;
+}
 
-  if (error) {
-    return <div>Error</div>;
-  }
+const ProductsSlider = ({ collection }: Props) => {
+  const router = useRouter();
+  const locale: Locale = router.locale as Locale;
 
   return (
     <div className="py-20 lg:py-[100px]">
       <SectionHeader
-        sectionHeading="Заголовок"
-        sectionSubHeading="Текст какой-то"
+        sectionHeading={collection[`name_${locale}`]}
+        sectionSubHeading={collection[`description_${locale}`]}
         headingPosition="center"
       />
       <Swiper
@@ -53,7 +52,7 @@ const ProductsSlider = () => {
           },
         }}
       >
-        {data && data.map((product) => (
+        {collection.products.map((product) => (
           <SwiperSlide key={product.id}>
             <ProductCard product={product} />
           </SwiperSlide>

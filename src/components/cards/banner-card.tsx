@@ -2,18 +2,18 @@ import Link from '@components/ui/link';
 import Image from 'next/image';
 import useWindowSize from '@utils/use-window-size';
 import cn from 'classnames';
+import { useRouter } from 'next/router';
+import { MyBanner } from '@framework/types';
 
 interface BannerProps {
-  banner: any;
+  banner: MyBanner;
   variant?: 'rounded' | 'default';
   effectActive?: boolean;
   className?: string;
   classNameInner?: string;
 }
 
-function getImage(deviceWidth: number, imgObj: any) {
-  return deviceWidth < 480 ? imgObj.mobile : imgObj.desktop;
-}
+type Locale = 'ru' | 'uz';
 
 const BannerCard: React.FC<BannerProps> = ({
   banner,
@@ -22,33 +22,25 @@ const BannerCard: React.FC<BannerProps> = ({
   effectActive = true,
   classNameInner,
 }) => {
-  const { width } = useWindowSize();
-  const { slug, title, image } = banner;
-  const selectedImage = getImage(width!, image);
-  
+  const router = useRouter();
+  const locale: Locale = router.locale as Locale;
+
   return (
-    <div className={cn('mx-auto', className)}>
-      <Link
-        href={slug}
-        className={cn(
-          'h-full group flex justify-center relative overflow-hidden',
-          classNameInner
-        )}
-      >
-        <Image
-          objectFit='cover'
-          src={selectedImage.url}
-          width={selectedImage.width}
-          height={selectedImage.height}
-          alt={title}
-          quality={100}
-          className={cn('bg-skin-thumbnail object-cover w-full', {
-            'rounded-md': variant === 'rounded',
-          })}
-        />
-        {effectActive && (
-          <div className="absolute top-0 -start-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent to-white opacity-30 group-hover:animate-shine" />
-        )}
+    <div>
+      <Link href={'/'}>
+        <div className="relative w-full h-[300px] md:h-[400px] lg:h-[500px] rounded-lg">
+          <Image
+            objectFit="cover"
+            src={banner[`image_full_${locale}`]}
+            layout="fill"
+            alt={'Banner Image'}
+            quality={100}
+            className="object-cover rounded-lg"
+          />
+          {effectActive && (
+            <div className="absolute top-0 -start-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent to-white opacity-30 group-hover:animate-shine" />
+          )}
+        </div>
       </Link>
     </div>
   );
