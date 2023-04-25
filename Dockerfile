@@ -19,9 +19,6 @@ RUN yarn install
 # Copy all files
 COPY ./ ./
 
-# Permission to cache
-RUN chmod -R 777 .next/cache/images
-
 # Build app
 RUN yarn build
 
@@ -31,6 +28,9 @@ EXPOSE 3000
 # Run container as non-root (unprivileged) user
 # The "node" user is provided in the Node.js Alpine base image
 USER node
+
+# Permission to cache
+RUN chmod -R 777 .next/cache/images
 
 # Launch app with PM2
 # CMD [ "pm2-runtime", "start", "yarn", "--", "start" ]
