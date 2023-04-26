@@ -22,8 +22,6 @@ export const useLogoutMutation = () => {
       unauthorize();
       Router.push('/');
     },
-    onError: (data) => {
-      (data, 'logout error response');
-    },
+    onError: (data) => {},
   });
 };

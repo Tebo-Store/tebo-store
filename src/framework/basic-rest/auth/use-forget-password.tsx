@@ -15,8 +15,6 @@ export const useForgetPasswordMutation = () => {
     onSuccess: (_data) => {
       Cookies.remove('auth_token');
     },
-    onError: (data) => {
-      (data, 'forget password error response');
-    },
+    onError: (data) => {},
   });
 };

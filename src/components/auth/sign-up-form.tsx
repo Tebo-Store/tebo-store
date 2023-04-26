@@ -46,7 +46,6 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
       password,
       remember_me,
     });
-    (name, email, password, 'sign form values');
   }
   return (
     <div

@@ -9,11 +9,7 @@ async function changeEmail(input: ChangeEmailInputType) {
 }
 export const useChangeEmailMutation = () => {
   return useMutation((input: ChangeEmailInputType) => changeEmail(input), {
-    onSuccess: (data) => {
-      (data, 'ChangeEmail success response');
-    },
-    onError: (data) => {
-      (data, 'ChangeEmail error response');
-    },
+    onSuccess: (data) => {},
+    onError: (data) => {},
   });
 };
