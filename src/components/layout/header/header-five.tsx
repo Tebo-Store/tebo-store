@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 import cn from 'classnames';
-import { ROUTES } from '@utils/routes';
+import { Popover } from '@headlessui/react';
 import { useUI } from '@contexts/ui.context';
 import { siteSettings } from '@settings/site-settings';
 import { addActiveScroll } from '@utils/add-active-scroll';
@@ -15,8 +15,8 @@ import SearchIcon from '@components/icons/search-icon';
 import { useModalAction } from '@components/common/modal/modal.context';
 import useOnClickOutside from '@utils/use-click-outside';
 import { FiMenu } from 'react-icons/fi';
-import Delivery from '@components/layout/header/delivery';
 import CategoryDropdownMenu from '@components/category/category-dropdown-menu';
+import { MyCategory } from '@framework/types';
 const AuthMenu = dynamic(() => import('./auth-menu'), { ssr: false });
 const CartButton = dynamic(() => import('@components/cart/cart-button'), {
   ssr: false,
@@ -25,7 +25,7 @@ const CartButton = dynamic(() => import('@components/cart/cart-button'), {
 type DivElementRef = React.MutableRefObject<HTMLDivElement>;
 const { site_header } = siteSettings;
 
-const Header: React.FC = () => {
+const Header = ({ categories }: { categories: MyCategory[] }) => {
   const { t } = useTranslation('common');
   const {
     displaySearch,
@@ -33,7 +33,7 @@ const Header: React.FC = () => {
     openSearch,
     closeSearch,
     isAuthorized,
-    unauthorize
+    unauthorize,
   } = useUI();
   const { openModal } = useModalAction();
   const siteHeaderRef = useRef() as DivElementRef;
@@ -50,9 +50,8 @@ const Header: React.FC = () => {
   }
 
   function handleLogout() {
-    unauthorize()
+    unauthorize();
   }
-
 
   return (
     <header
@@ -106,8 +105,7 @@ const Header: React.FC = () => {
                   onClick: handleLogin,
                 }}
                 logout={handleLogout}
-              >
-              </AuthMenu>
+              ></AuthMenu>
             </div>
           </div>
           {/* End of auth & lang */}
@@ -118,16 +116,19 @@ const Header: React.FC = () => {
           <Container className="h-20 flex justify-between items-center py-2.5">
             <Logo className="navbar-logo w-0 opacity-0 transition-all duration-200 ease-in-out" />
             {/* End of logo */}
-            <div className="categories-header-button relative me-8 flex-shrink-0">
-              <button
+            <Popover className="categories-header-button relative me-8 flex-shrink-0">
+              <Popover.Button
                 className="border border-skin-base rounded-md focus:outline-none flex-shrink-0 text-15px font-medium text-skin-base px-[18px] py-3 flex items-center transition-all hover:border-skin-four"
                 onClick={handleCategoryMenu}
               >
                 <FiMenu className="text-2xl me-3" />
                 {t('text-all-categories')}
-              </button>
-              {categoryMenu && <CategoryDropdownMenu />}
-            </div>
+              </Popover.Button>
+
+              <Popover.Panel>
+                <CategoryDropdownMenu categories={categories} />
+              </Popover.Panel>
+            </Popover>
 
             <HeaderMenu
               data={site_header.menu}
@@ -169,8 +170,7 @@ const Header: React.FC = () => {
                       onClick: handleLogin,
                     }}
                     logout={handleLogout}
-                  >
-                  </AuthMenu>
+                  ></AuthMenu>
                 </div>
                 {/* End of auth */}
               </div>

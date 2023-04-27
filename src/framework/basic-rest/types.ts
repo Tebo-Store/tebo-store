@@ -59,6 +59,16 @@ export type Collection = {
   productCount?: number;
 };
 
+export interface MyCategory {
+  id: number;
+  name_ru: string;
+  name_uz: string;
+  description_ru: string;
+  description_uz: string;
+  slug: string;
+  descendants: MyCategory[] | []
+}
+
 export interface MyBanner {
   id: number;
   name: string;

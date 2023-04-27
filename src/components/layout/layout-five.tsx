@@ -7,7 +7,13 @@ import MobileNavigation from '@components/layout/mobile-navigation/mobile-naviga
 import { IoChevronForwardCircleOutline } from 'react-icons/io5';
 import { useTranslation } from 'next-i18next';
 
-const Layout: React.FC = ({ children }) => {
+const Layout = ({
+  children,
+  pageProps,
+}: {
+  children: React.ReactNode;
+  pageProps: any;
+}) => {
   const { t } = useTranslation('common');
   const [highlightedBar, setHighlightedBar] = useSessionStorage(
     'borobazar-highlightedBar',
@@ -16,33 +22,9 @@ const Layout: React.FC = ({ children }) => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      {highlightedBar !== 'true' && (
-        <HighlightedBar
-          onClose={() => setHighlightedBar('true')}
-          variant="highlightedTwo"
-          className="text-[#460135]"
-        >
-          <div className="text-sm font-medium py-0.5 pe-6">
-            <span>
-              {t(
-                '35% Exclusive discount plus free next day delivery, excludes sale'
-              )}
-              <Link
-                href="#"
-                className="inline-flex text-xs uppercase font-bold ps-1.5 items-center relative transition-all top-[1px] hover:opacity-80"
-              >
-                <span className="border-b border-[#460135] inline-block pb-0.5">
-                  Learn More
-                </span>
-                <IoChevronForwardCircleOutline className="text-2xl ms-1 relative -top-0.5" />
-              </Link>
-            </span>
-          </div>
-        </HighlightedBar>
-      )}
       {/* End of highlighted bar  */}
 
-      <Header />
+      <Header categories={pageProps.categories} />
       <main
         className="relative flex-grow"
         style={{
@@ -52,7 +34,7 @@ const Layout: React.FC = ({ children }) => {
         {children}
       </main>
       <Footer />
-      <MobileNavigation />
+      <MobileNavigation categories={pageProps.categories} />
     </div>
   );
 };

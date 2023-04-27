@@ -14,6 +14,7 @@ import { elegantBannerGrid as banners } from '@framework/static/banner';
 import FeatureCarousel from '@components/common/featured-carousel';
 import {
   MyBanner,
+  MyCategory,
   ResponseBrands,
   ResponseCollections,
   ResponseProducts,
@@ -25,6 +26,7 @@ export default function Home({
   products,
   collections,
   banners,
+  categories,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <>
@@ -77,6 +79,7 @@ export const getServerSideProps: GetServerSideProps<{
   products: ResponseProducts;
   collections: ResponseCollections;
   banners: MyBanner[];
+  categories: MyCategory[];
 }> = async ({ locale }) => {
   const responseBrands = await fetch(`${process.env.API}/api/v1/brands`);
   const brands: ResponseBrands = await responseBrands.json();
@@ -92,12 +95,18 @@ export const getServerSideProps: GetServerSideProps<{
   const responseBanners = await fetch(`${process.env.API}/api/v1/homesliders`);
   const banners: MyBanner[] = await responseBanners.json();
 
+  const responseCategories = await fetch(
+    `${process.env.API}/api/v1/categories/all`
+  );
+  const categories: MyCategory[] = await responseCategories.json();
+
   return {
     props: {
       brands,
       products,
       collections,
       banners,
+      categories,
       ...(await serverSideTranslations(locale!, [
         'common',
         'forms',

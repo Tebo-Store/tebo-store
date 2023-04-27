@@ -11,17 +11,22 @@ import { Drawer } from '@components/common/drawer/drawer';
 import { getDirection } from '@utils/get-direction';
 import { useModalAction } from '@components/common/modal/modal.context';
 import { useTranslation } from 'next-i18next';
+import { MyCategory } from '@framework/types';
 const CartButton = dynamic(() => import('@components/cart/cart-button'), {
   ssr: false,
 });
 const AuthMenu = dynamic(() => import('@components/layout/header/auth-menu'), {
   ssr: false,
 });
-const MobileMenu = dynamic(
-  () => import('@components/layout/header/mobile-menu')
-);
+// const MobileMenu = dynamic(
+//   () => import('@components/layout/header/mobile-menu')
+// );
 
-const BottomNavigation: React.FC = () => {
+import MobileMenu from '@components/layout/header/mobile-menu';
+
+const BottomNavigation: React.FC<{ categories: MyCategory[] }> = ({
+  categories,
+}) => {
   const { t } = useTranslation('common');
   const {
     openSidebar,
@@ -29,7 +34,7 @@ const BottomNavigation: React.FC = () => {
     displaySidebar,
     toggleMobileSearch,
     isAuthorized,
-    unauthorize
+    unauthorize,
   } = useUI();
   const { openModal } = useModalAction();
   const { locale } = useRouter();
@@ -42,7 +47,7 @@ const BottomNavigation: React.FC = () => {
     return openSidebar();
   }
   function handleLogout() {
-    unauthorize()
+    unauthorize();
   }
 
   return (
@@ -69,15 +74,13 @@ const BottomNavigation: React.FC = () => {
         <CartButton hideLabel={true} iconClassName="text-opacity-100" />
         <AuthMenu
           isAuthorized={isAuthorized}
-
           btnProps={{
             className: 'flex-shrink-0 focus:outline-none',
             children: <UserIcon />,
             onClick: handleLogin,
           }}
           logout={handleLogout}
-        >
-        </AuthMenu>
+        ></AuthMenu>
       </div>
       <Drawer
         placement={dir === 'rtl' ? 'right' : 'left'}
@@ -88,7 +91,7 @@ const BottomNavigation: React.FC = () => {
         level={null}
         contentWrapperStyle={contentWrapperCSS}
       >
-        <MobileMenu />
+        <MobileMenu categories={categories} />
       </Drawer>
     </>
   );

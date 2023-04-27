@@ -1,82 +1,44 @@
-import cn from 'classnames';
-import { useTranslation } from 'next-i18next';
 import Link from '@components/ui/link';
 import { IoIosArrowForward } from 'react-icons/io';
-import Image from '@components/ui/image';
-import { ROUTES } from '@utils/routes';
+import { MyCategory } from '@framework/types';
+import { useRouter } from 'next/router';
 
-function SidebarMenuItem({ className, item, depth = 0 }: any) {
-  const { t } = useTranslation('common');
-  const { name, children: items, icon } = item;
+type Locale = 'ru' | 'uz';
+
+function SidebarMenuItem({ data }: { data: MyCategory[] }) {
+  const router = useRouter();
+  const locale: Locale = router.locale as Locale;
+
   return (
     <>
-      <li
-        className={`flex justify-between items-center transition ${
-          className
-            ? className
-            : 'text-sm hover:text-skin-primary px-3.5 2xl:px-4 py-2.5 border-b border-skin-base last:border-b-0'
-        }`}
-      >
-        <Link
-          href={ROUTES.SEARCH}
-          className={cn(
-            'flex items-center w-full text-start outline-none focus:outline-none focus:ring-0 focus:text-skin-base'
-          )}
-        >
-          {icon && (
-            <div className="inline-flex flex-shrink-0 w-8 3xl:h-auto">
-              <Image
-                src={icon ?? '/assets/placeholder/category-small.svg'}
-                alt={name || t('text-category-thumbnail')}
-                width={25}
-                height={25}
-              />
-            </div>
-          )}
-          <span className="capitalize ps-2.5 md:ps-4 2xl:ps-3 3xl:ps-4">
-            {name}
-          </span>
-          {items && (
-            <span className="ms-auto hidden md:inline-flex">
-              <IoIosArrowForward className="text-15px text-skin-base text-opacity-40" />
-            </span>
-          )}
-        </Link>
-        {Array.isArray(items) ? (
-          <div className="hidden md:block absolute z-10 left-full top-0 w-full h-full bg-skin-fill border border-skin-base rounded-md opacity-0 invisible">
-            <ul key="content" className="text-xs py-1.5">
-              {items?.map((currentItem) => {
-                const childDepth = depth + 1;
-                return (
-                  <SidebarMenuItem
-                    key={`${currentItem.name}${currentItem.slug}`}
-                    item={currentItem}
-                    depth={childDepth}
-                    className={cn(
-                      'text-sm px-3 py-3 pe-4 text-skin-muted hover:text-skin-primary border-b border-skin-base last:border-b-0 mb-0.5'
-                    )}
-                  />
-                );
-              })}
+      {data.map((item) => (
+        <li className="category-item" key={item.id}>
+          <Link
+            className="flex items-center justify-between p-2 px-4 transition"
+            href="/"
+          >
+            <span>{item[`name_${locale}`]}</span>
+
+            {item.descendants && item.descendants.length > 0 && (
+              <IoIosArrowForward className="ml-2" />
+            )}
+          </Link>
+
+          {item.descendants && item.descendants.length > 0 && (
+            <ul className="py-2 hidden w-full absolute top-0 left-[300px] min-h-full bg-white shadow-card rounded-lg">
+              <SidebarMenuItem data={item.descendants} />
             </ul>
-          </div>
-        ) : null}
-      </li>
+          )}
+        </li>
+      ))}
     </>
   );
 }
 
-function SidebarMenu({ items, className }: any) {
+function SidebarMenu({ items }: { items: MyCategory[] }) {
   return (
-    <ul
-      className={cn(
-        'w-64 md:w-72 h-430px bg-skin-fill border border-skin-base rounded-md category-dropdown-menu pt-1.5',
-        className
-      )}
-    >
-      {items?.map((item: any) => (
-        <SidebarMenuItem key={`${item.slug}-key-${item.id}`} item={item} />
-      ))}
+    <ul className="py-2 absolute top-[calc(100%+4px)] left-0 w-[300px] bg-white rounded-lg shadow-card">
+      <SidebarMenuItem data={items} />
     </ul>
   );
 }

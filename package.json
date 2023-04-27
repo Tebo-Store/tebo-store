@@ -55,7 +55,7 @@
     "@types/lodash": "^4.14.176",
     "@types/node": "^16.11.5",
     "@types/overlayscrollbars": "^1.12.1",
-    "@types/react": "18.0.1",
+    "@types/react": "17.0.32",
     "@types/react-copy-to-clipboard": "^5.0.2",
     "@types/react-scroll": "^1.8.3",
     "@types/react-star-rating-component": "^1.4.1",

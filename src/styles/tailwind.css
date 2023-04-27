@@ -589,3 +589,11 @@ input[type='number']:focus {
   width: 0;
   height: 0;
 }
+
+.category-item:hover > a {
+  @apply text-skin-primary bg-skin-primary/10
+}
+
+.category-item:hover > ul {
+  @apply block
+}
